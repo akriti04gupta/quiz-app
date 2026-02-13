@@ -12,9 +12,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
-app.use('/assets', express.static('assets'));
-app.use('/index_page', express.static('index_page'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/index_page', express.static(path.join(__dirname, 'index_page')));
 
 app.use('/api/quiz', quizRoutes);
 app.use('/api/questions', questionRoutes);
