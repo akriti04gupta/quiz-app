@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const quizRoutes = require('./routes/quizRoutes');
 const questionRoutes = require('./routes/questionRoutes');
@@ -21,15 +22,15 @@ app.use('/api', dashboardRoutes);
 
 // Serve index.html for client-side routing
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.get('/dashboard', (req, res) => {
-  res.sendFile(__dirname + '/public/dashboard.html');
+  res.sendFile(path.join(__dirname, 'public/dashboard.html'));
 });
 
 app.get('/quiz', (req, res) => {
-  res.sendFile(__dirname + '/public/quiz.html');
+  res.sendFile(path.join(__dirname, 'public/quiz.html'));
 });
 
 app.listen(PORT, () => {
