@@ -7,7 +7,7 @@ const questionRoutes = require('./routes/questionRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +18,19 @@ app.use('/index_page', express.static('index_page'));
 app.use('/api/quiz', quizRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api', dashboardRoutes);
+
+// Serve index.html for client-side routing
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(__dirname + '/public/dashboard.html');
+});
+
+app.get('/quiz', (req, res) => {
+  res.sendFile(__dirname + '/public/quiz.html');
+});
 
 app.listen(PORT, () => {
   console.log(`\n========================================`);
