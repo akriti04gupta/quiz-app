@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Firebase Rules (keep private)
+FIREBASE_RULES_PRODUCTION_SECURE.json
+firebase-service-account.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

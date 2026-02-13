@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KRAK THE CODE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Space Grotesk", Arial, sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a0a08 100%);
+            color: #efe9dd;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            border-right: 2px solid #ff3b00;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff3b00;
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(239, 233, 221, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 59, 0, 0.1);
+            border-color: #ff3b00;
+        }
+
+        .nav-item.active {
+            background: #ff3b00;
+            color: #0d0d0d;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ffffff, #ff3b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: rgba(239, 233, 221, 0.7);
+            font-size: 14px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 59, 0, 0.1) 0%, rgba(255, 59, 0, 0.05) 100%);
+            border: 1px solid #ff3b00;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ff3b00;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(239, 233, 221, 0.7);
+        }
+
+        /* Main Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .section {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.6) 0%, rgba(13, 13, 13, 0.8) 100%);
+            border: 1px solid rgba(255, 59, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #ff3b00;
+        }
+
+        /* Category/Difficulty Clickable Stats */
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255,59,0,0.05);
+            border-radius: 8px;
+            border-left: 3px solid #ff3b00;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255,59,0,0.15);
+            transform: translateX(4px);
+        }
+
+        /* Users Table */
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th {
+            text-align: left;
+            padding: 12px;
+            background: rgba(255, 59, 0, 0.1);
+            border-bottom: 2px solid #ff3b00;
+            color: #ff3b00;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .users-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 59, 0, 0.1);
+        }
+
+        .users-table tr:hover {
+            background: rgba(255, 59, 0, 0.05);
+        }
+
+        /* Filters Container */
+        .filters-container {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .filter-input, .filter-select {
+            padding: 10px;
+            background: rgba(13,13,13,0.8);
+            border: 1px solid rgba(255,59,0,0.3);
+            border-radius: 8px;
+            color: #efe9dd;
+            font-size: 14px;
+        }
+
+        .filter-input::placeholder {
+            color: rgba(239, 233, 221, 0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #ff3b00;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #ff5c2e;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 59, 0, 0.1);
+            color: #ff3b00;
+            border: 1px solid #ff3b00;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 59, 0, 0.2);
+        }
+
+        .btn-danger {
+            background: rgba(220, 38, 38, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: rgba(220, 38, 38, 0.3);
+        }
+
+        /* Questions List */
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-item {
+            background: rgba(26,26,26,0.6);
+            border: 1px solid rgba(255,59,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 16px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .meta-tag {
+            padding: 4px 12px;
+            background: rgba(255, 59, 0, 0.1);
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ff3b00;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(239, 233, 221, 0.9);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(13,13,13,0.8);
+            border: 1px solid rgba(255,59,0,0.3);
+            border-radius: 8px;
+            color: #efe9dd;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Radio with Options */
+        .option-with-radio {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(13,13,13,0.6);
+            border: 1px solid rgba(255,59,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .option-with-radio:hover {
+            background: rgba(255,59,0,0.05);
+            border-color: rgba(255,59,0,0.4);
+        }
+
+        .option-with-radio input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #ff3b00;
+        }
+
+        .option-with-radio input[type="text"] {
+            flex: 1;
+            padding: 8px 12px;
+            background: transparent;
+            border: none;
+            color: #efe9dd;
+            font-size: 14px;
+        }
+
+        .option-with-radio input[type="text"]:focus {
+            outline: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 2px solid #ff3b00;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Popup Notification */
+        .popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff3b00 0%, #ff5c2e 100%);
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(255, 59, 0, 0.4);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            display: none;
+        }
+
+        .popup.show {
+            display: block;
+        }
+
+        /* Confirmation Modal */
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .confirmation-modal.show {
+            display: flex;
+        }
+
+        .confirmation-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 2px solid #ff3b00;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(255, 59, 0, 0.3);
+        }
+
+        .confirmation-content h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #efe9dd;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .confirmation-buttons button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .confirmation-buttons .btn-confirm {
+            background: #ff3b00;
+            color: #fff;
+        }
+
+        .confirmation-buttons .btn-confirm:hover {
+            background: #ff5c2e;
+            transform: translateY(-2px);
+        }
+
+        .confirmation-buttons .btn-cancel {
+            background: rgba(239, 233, 221, 0.1);
+            color: #efe9dd;
+            border: 1px solid rgba(239, 233, 221, 0.3);
+        }
+
+        .confirmation-buttons .btn-cancel:hover {
+            background: rgba(239, 233, 221, 0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Login Screen */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a0a08 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .login-box {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 2px solid #ff3b00;
+            border-radius: 16px;
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            color: #ff3b00;
+            margin-bottom: 30px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            background: rgba(13,13,13,0.8);
+            border: 1px solid rgba(255,59,0,0.3);
+            border-radius: 8px;
+            color: #efe9dd;
+        }
+
+        .password-field {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .toggle-password svg {
+            width: 24px;
+            height: 24px;
+            fill: rgba(239, 233, 221, 0.7);
+            transition: fill 0.2s;
+        }
+
+        .toggle-password:hover svg {
+            fill: #ff3b00;
+        }
+
+        .toggle-password:focus {
+            outline: none;
+        }
+
+        .login-box.shake {
+            animation: shake 0.35s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+            100% { transform: translateX(0); }
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .date-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            background: rgba(255, 59, 0, 0.15);
+            border: 1px solid rgba(255, 59, 0, 0.4);
+            border-radius: 999px;
+            font-size: 12px;
+            color: #ff3b00;
+        }
+
+        .date-tag button {
+            background: transparent;
+            border: none;
+            color: #ff3b00;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Level Checkboxes */
+        .level-checkboxes {
+            display: flex;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(13,13,13,0.8);
+            border: 1px solid rgba(255,59,0,0.3);
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .level-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .level-checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #ff3b00;
+        }
+
+        .level-checkbox-item label {
+            color: #efe9dd;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Calendar Widget */
+        .calendar-widget {
+            background: rgba(13,13,13,0.95);
+            border: 1px solid rgba(255,59,0,0.3);
+            border-radius: 12px;
+            padding: 12px;
+            max-width: 280px;
+            display: none;
+        }
+
+        .calendar-widget.active {
+            display: block;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,59,0,0.2);
+        }
+
+        .calendar-header button {
+            background: transparent;
+            border: none;
+            color: #ff3b00;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+            transition: all 0.2s;
+        }
+
+        .calendar-header button:hover {
+            background: rgba(255,59,0,0.1);
+            border-radius: 4px;
+        }
+
+        .calendar-month-year {
+            font-size: 13px;
+            font-weight: 600;
+            color: #efe9dd;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 10px;
+            color: rgba(239,233,221,0.6);
+            padding: 3px;
+            font-weight: 600;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .calendar-day:not(.empty):not(.other-month):hover {
+            background: rgba(255,59,0,0.1);
+            border-color: rgba(255,59,0,0.3);
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+        }
+
+        .calendar-day.other-month {
+            color: rgba(239,233,221,0.3);
+            cursor: default;
+        }
+
+        .calendar-day.selected {
+            background: #ff3b00;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .calendar-day.today {
+            border-color: #ff3b00;
+        }
+
+        .calendar-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,59,0,0.2);
+        }
+
+        #dashboard-tab.loading .stat-value,
+        #dashboard-tab.loading .stat-label,
+        #dashboard-tab.loading .section {
+            opacity: 0.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <h1>KRAK Admin Login</h1>
+            <input type="text" id="loginEmail" placeholder="Email" value="">
+            <div class="password-field">
+                <input type="password" id="loginPassword" placeholder="Password" value="">
+                <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Toggle password visibility">
+                    <svg id="eyeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                    </svg>
+                </button>
+            </div>
+            <button class="btn btn-primary" onclick="handleLogin()" style="width: 100%;">Login</button>
+        </div>
+    </div>
+
+    <!-- Popup Notification -->
+    <div id="popup" class="popup"></div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="confirmation-modal">
+        <div class="confirmation-content">
+            <h3 id="confirmationMessage"></h3>
+            <div class="confirmation-buttons">
+                <button class="btn-confirm" onclick="confirmAction()">OK</button>
+                <button class="btn-cancel" onclick="cancelAction()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="mainContainer">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">KRAK</div>
+            <nav class="nav-menu">
+                <div class="nav-item active" data-tab="dashboard" onclick="showTab('dashboard', this)">Dashboard</div>
+                <div class="nav-item" data-tab="users" onclick="showTab('users', this)">User Data</div>
+                <div class="nav-item" data-tab="questions" onclick="showTab('questions', this)">Questions</div>
+                <div class="nav-item" data-tab="add-question" onclick="showTab('add-question', this)">Add Question</div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab">
+                <div class="header">
+                    <h1>Dashboard</h1>
+                    <p>Quiz Statistics & Overview</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalQuestionsValue">0</div>
+                        <div class="stat-label">Total Questions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalUsersValue">0</div>
+                        <div class="stat-label">Users Played</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgTimeValue">0s</div>
+                        <div class="stat-label">Avg Time / Quiz</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgScoreValue">0</div>
+                        <div class="stat-label">Avg Points</div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="section">
+                        <div class="section-title">Questions by Category</div>
+                        <div id="categoryStats"></div>
+                    </div>
+                    <div class="section">
+                        <div class="section-title">Questions by Difficulty</div>
+                        <div id="difficultyStats"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users-tab" class="hidden">
+                <div class="header">
+                    <h1>User Data</h1>
+                    <p>All player statistics and performance</p>
+                    <button class="btn btn-primary" onclick="downloadCSV()" style="margin-top: 16px;">Download CSV</button>
+                </div>
+
+                <div class="filters-container">
+                    <input type="text" id="userNameSearch" class="filter-input" placeholder="Search by player name...">
+                    <select id="levelFilter" class="filter-select" onchange="updateLevelFilter()">
+                        <option value="">All Levels</option>
+                        <option value="1">Level 1</option>
+                        <option value="2">Level 2</option>
+                        <option value="3">Level 3</option>
+                    </select>
+                    <select id="dateFilterToggle" class="filter-select" onchange="toggleCalendar()">
+                        <option value="">All Dates</option>
+                        <option value="custom">Select Dates</option>
+                    </select>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div class="calendar-widget">
+                        <div class="calendar-header">
+                            <button onclick="changeMonth(-1)" aria-label="Previous month">&lt;</button>
+                            <span class="calendar-month-year" id="calendarMonthYear">January 2026</span>
+                            <button onclick="changeMonth(1)" aria-label="Next month">&gt;</button>
+                        </div>
+                        <div class="calendar-weekdays">
+                            <div class="calendar-weekday">Su</div>
+                            <div class="calendar-weekday">Mo</div>
+                            <div class="calendar-weekday">Tu</div>
+                            <div class="calendar-weekday">We</div>
+                            <div class="calendar-weekday">Th</div>
+                            <div class="calendar-weekday">Fr</div>
+                            <div class="calendar-weekday">Sa</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDays"></div>
+                        <div class="calendar-actions">
+                            <button class="btn btn-secondary" type="button" onclick="clearSelectedDates()" style="flex: 1;">Clear Dates</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="selectedDates" class="date-tags"></div>
+
+                <div class="section">
+                    <div class="section-title">Player Statistics</div>
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Player Name</th>
+                                <th>Total Points</th>
+                                <th>Exact Time Taken</th>
+                                <th>Questions Answered</th>
+                                <th>Level Reached</th>
+                                <th>Date Played</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Questions Tab -->
+            <div id="questions-tab" class="hidden">
+                <div class="header">
+                    <h1>Manage Questions</h1>
+                    <p>Edit existing MCQ questions</p>
+                </div>
+
+                <div class="section" style="max-height: none;">
+                    <div class="section-title">Question List</div>
+                    
+                    <div class="filters-container">
+                        <input type="text" id="nameSearch" class="filter-input" placeholder="Search by question text...">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="Williams">Williams</option>
+                            <option value="Kraken">Kraken</option>
+                            <option value="Formula 1">Formula 1</option>
+                        </select>
+                        <select id="difficultyFilter" class="filter-select">
+                            <option value="">All Difficulties</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="veryHard">Very Hard</option>
+                        </select>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="used">Used</option>
+                            <option value="unused">Unused</option>
+                        </select>
+                    </div>
+
+                    <div class="questions-list" id="questionsList"></div>
+                </div>
+            </div>
+
+            <!-- Add Question Tab -->
+            <div id="add-question-tab" class="hidden">
+                <div class="header">
+                    <h1>Add New Question</h1>
+                    <p>Create a new MCQ question</p>
+                </div>
+
+                <div class="section">
+                    <div class="form-group">
+                        <label>Question Text</label>
+                        <textarea id="newQuestion" placeholder="Enter the question..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="newCategory">
+                            <option value="">Select Category</option>
+                            <option value="Williams">Williams</option>
+                            <option value="Kraken">Kraken</option>
+                            <option value="Formula 1">Formula 1</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Difficulty</label>
+                        <select id="newDifficulty">
+                            <option value="">Select Difficulty</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="veryHard">Very Hard</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Options (Select the correct answer)</label>
+                        <div class="option-with-radio">
+                            <input type="radio" name="newCorrectOption" value="0" id="newRadio0">
+                            <input type="text" id="newOption0" placeholder="Write Option 1">
+                        </div>
+                        <div class="option-with-radio">
+                            <input type="radio" name="newCorrectOption" value="1" id="newRadio1">
+                            <input type="text" id="newOption1" placeholder="Write Option 2">
+                        </div>
+                        <div class="option-with-radio">
+                            <input type="radio" name="newCorrectOption" value="2" id="newRadio2">
+                            <input type="text" id="newOption2" placeholder="Write Option 3">
+                        </div>
+                        <div class="option-with-radio">
+                            <input type="radio" name="newCorrectOption" value="3" id="newRadio3">
+                            <input type="text" id="newOption3" placeholder="Write Option 4">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="resetAddForm()">Reset</button>
+                        <button class="btn btn-primary" onclick="addQuestion()">Save Question</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #ff3b00; margin-bottom: 20px;">Edit Question</h2>
+            
+            <div class="form-group">
+                <label>Question Text</label>
+                <textarea id="editQuestion"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="editCategory">
+                    <option value="Williams">Williams</option>
+                    <option value="Kraken">Kraken</option>
+                    <option value="Formula 1">Formula 1</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Difficulty</label>
+                <select id="editDifficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="veryHard">Very Hard</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Options (Select the correct answer)</label>
+                <div class="option-with-radio">
+                    <input type="radio" name="editCorrectOption" value="0" id="editRadio0">
+                    <input type="text" id="editOption0" placeholder="Option 1">
+                </div>
+                <div class="option-with-radio">
+                    <input type="radio" name="editCorrectOption" value="1" id="editRadio1">
+                    <input type="text" id="editOption1" placeholder="Option 2">
+                </div>
+                <div class="option-with-radio">
+                    <input type="radio" name="editCorrectOption" value="2" id="editRadio2">
+                    <input type="text" id="editOption2" placeholder="Option 3">
+                </div>
+                <div class="option-with-radio">
+                    <input type="radio" name="editCorrectOption" value="3" id="editRadio3">
+                    <input type="text" id="editOption3" placeholder="Option 4">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveEditedQuestion()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="js/firebaseConfig.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="js/state.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .frame {
+            position: relative;
+            width: min(100vw, 56.25vh);
+            aspect-ratio: 9 / 16;
+        }
+        .frame img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .tap-area {
+            position: absolute;
+            left: 24.95%;
+            top: 80.77%;
+            width: 49.73%;
+            height: 4.93%;
+            border: none;
+            background: #ffffff;
+            color: #0d0d0d;
+            font-size: clamp(14px, 2vw, 18px);
+            font-weight: 600;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s ease, color 0.15s ease;
+            cursor: pointer;
+        }
+        .tap-area:hover,
+        .tap-area:active,
+        .tap-area:focus {
+            background: #ff3b00;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <main class="frame">
+        <img src="/assets/Slide%2016_9%20-%2023.svg" alt="Slide 16_9 - 23">
+        <button class="tap-area" aria-label="Let's begin" onclick="location.href='quiz.html'">Let's Begin</button>
+    </main>
+</body>
+</html>
