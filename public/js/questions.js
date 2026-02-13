@@ -157,6 +157,7 @@ function deleteQuestion(questionId) {
 }
 
 async function addQuestion() {
+  console.log('addQuestion called');
   const question = document.getElementById('newQuestion').value;
   const category = document.getElementById('newCategory').value;
   const difficulty = document.getElementById('newDifficulty').value;
@@ -167,6 +168,7 @@ async function addQuestion() {
     document.getElementById('newOption3').value
   ];
   const correctAnswer = document.querySelector('input[name="newCorrectOption"]:checked')?.value;
+  console.log('Form values:', { question, category, difficulty, options, correctAnswer });
 
   if (!question || !category || !difficulty || options.some(o => !o) || correctAnswer === undefined) {
     showPopup('Please fill all fields including selecting the correct answer', 'error');

@@ -5,9 +5,11 @@ const router = express.Router();
 
 router.get('/dashboard', async (req, res) => {
   try {
+    console.log('[API] Dashboard route hit');
     const questionBankRef = db.ref('questionBank');
     const questionsSnapshot = await questionBankRef.once('value');
     const questions = questionsSnapshot.val();
+    console.log('[API] Questions retrieved:', questions ? 'data found' : 'no data');
     
     let allQuestions = [];
     const questionsByCategory = {};

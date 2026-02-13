@@ -14,11 +14,14 @@ function setDashboardLoading(isLoading) {
 
 async function loadDashboard() {
   try {
+    console.log('Loading dashboard...');
     setDashboardLoading(true);
     const response = await fetch(`${window.API_BASE_URL}/api/dashboard`);
+    console.log('Dashboard response status:', response.status);
     if (!response.ok) throw new Error('Failed to load dashboard');
     
     const data = await response.json();
+    console.log('Dashboard data received:', data);
     
     document.getElementById('totalQuestionsValue').textContent = data.totalQuestions || 0;
     document.getElementById('totalUsersValue').textContent = data.uniqueUsers || 0;
