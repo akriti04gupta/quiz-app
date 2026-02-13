@@ -15,7 +15,7 @@ function setDashboardLoading(isLoading) {
 async function loadDashboard() {
   try {
     setDashboardLoading(true);
-    const response = await fetch('http://localhost:3000/api/dashboard');
+    const response = await fetch(`${window.API_BASE_URL}/api/dashboard`);
     if (!response.ok) throw new Error('Failed to load dashboard');
     
     const data = await response.json();

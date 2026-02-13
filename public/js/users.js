@@ -1,6 +1,6 @@
 async function loadUsers() {
   try {
-    const response = await fetch('http://localhost:3000/api/users');
+    const response = await fetch(`${window.API_BASE_URL}/api/users`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

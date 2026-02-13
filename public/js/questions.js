@@ -1,6 +1,6 @@
 async function loadQuestions() {
   try {
-    const response = await fetch('http://localhost:3000/api/quiz/all');
+    const response = await fetch(`${window.API_BASE_URL}/api/quiz/all`);
     if (!response.ok) throw new Error('Failed to load questions');
     
     appState.allQuestions = await response.json();
@@ -71,7 +71,7 @@ function renderQuestions(questions) {
 
 async function openEditModal(questionId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/questions/${questionId}`);
+    const response = await fetch(`${window.API_BASE_URL}/api/questions/${questionId}`);
     if (!response.ok) throw new Error('Failed to load question');
     
     const question = await response.json();
@@ -115,7 +115,7 @@ async function saveEditedQuestion() {
   }
 
   try {
-    const response = await fetch(`http://localhost:3000/api/questions/${appState.currentEditingQuestionId}`, {
+    const response = await fetch(`${window.API_BASE_URL}/api/questions/${appState.currentEditingQuestionId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -142,7 +142,7 @@ function deleteQuestion(questionId) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/questions/${questionId}`, {
+      const response = await fetch(`${window.API_BASE_URL}/api/questions/${questionId}`, {
         method: 'DELETE'
       });
 
@@ -174,7 +174,7 @@ async function addQuestion() {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/api/questions', {
+    const response = await fetch(`${window.API_BASE_URL}/api/questions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
