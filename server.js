@@ -12,6 +12,20 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Add request timeout (30 seconds)
+app.use((req, res, next) => {
+  const timeout = setTimeout(() => {
+    if (!res.headersSent) {
+      res.status(504).json({ error: 'Request timeout' });
+    }
+  }, 30000);
+  
+  res.on('finish', () => clearTimeout(timeout));
+  res.on('close', () => clearTimeout(timeout));
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/index_page', express.static(path.join(__dirname, 'index_page')));
