@@ -5,26 +5,21 @@ const router = express.Router();
 
 router.get('/:id', async (req, res) => {
   try {
-    const questionBankRef = db.ref('questionBank');
-    const snapshot = await questionBankRef.once('value');
+    const questionsRef = db.ref('questions');
+    const snapshot = await questionsRef.once('value');
     const questions = snapshot.val();
     
     let foundQuestion = null;
-    for (const category in questions) {
-      for (const difficulty in questions[category]) {
-        const q = questions[category][difficulty].find(
-          q => q.id === req.params.id
-        );
-        if (q) {
-          foundQuestion = {
-            ...q,
-            category: category,
-            difficulty: difficulty
-          };
-          break;
-        }
-      }
-      if (foundQuestion) break;
+    if (questions && questions[req.params.id]) {
+      const q = questions[req.params.id];
+      foundQuestion = {
+        id: req.params.id,
+        question: q.question,
+        options: q.options || [],
+        correctAnswer: q.correctAnswer || 0,
+        category: q.category,
+        difficulty: q.difficulty
+      };
     }
 
     if (!foundQuestion) {
@@ -41,30 +36,29 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { question, category, difficulty, options, correctAnswer } = req.body;
-    const questionBankRef = db.ref('questionBank');
-    const snapshot = await questionBankRef.once('value');
+    const normalizedDifficulty = String(difficulty || '').replace(/\s+/g, '').toLowerCase();
+    const difficultyValue = normalizedDifficulty === 'veryhard' ? 'veryHard' : normalizedDifficulty;
+    const questionsRef = db.ref('questions');
+    const snapshot = await questionsRef.once('value');
     const questions = snapshot.val() || {};
     
-    const newId = `${category.charAt(0).toUpperCase()}${Date.now()}`;
+    const newId = `q_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const newQuestion = {
       id: newId,
       question,
       options,
-      correctAnswer
+      correctAnswer: parseInt(correctAnswer) || 0,
+      category: category,
+      difficulty: difficultyValue,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
     };
 
-    const cat = category.charAt(0).toUpperCase() + category.slice(1);
-    if (!questions[cat]) {
-      questions[cat] = {};
-    }
-    if (!questions[cat][difficulty]) {
-      questions[cat][difficulty] = [];
-    }
+    questions[newId] = newQuestion;
+    await questionsRef.set(questions);
 
-    questions[cat][difficulty].push(newQuestion);
-    await questionBankRef.set(questions);
-
+    console.log(`[/api/questions] Added question: ${newId}`);
     res.json({ success: true, id: newId });
   } catch (error) {
     console.error('Error adding question:', error);
@@ -75,54 +69,29 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { question, category, difficulty, options, correctAnswer } = req.body;
-    const questionBankRef = db.ref('questionBank');
-    const snapshot = await questionBankRef.once('value');
+    const normalizedDifficulty = String(difficulty || '').replace(/\s+/g, '').toLowerCase();
+    const difficultyValue = normalizedDifficulty === 'veryhard' ? 'veryHard' : normalizedDifficulty;
+    const questionsRef = db.ref('questions');
+    const snapshot = await questionsRef.once('value');
     const questions = snapshot.val() || {};
     
-    let found = false;
-    for (const cat in questions) {
-      for (const diff in questions[cat]) {
-        const index = questions[cat][diff].findIndex(
-          q => q.id === req.params.id
-        );
-        if (index !== -1) {
-          const normalizedCategory = (category || '').trim();
-          const normalizedDifficulty = (difficulty || '').trim();
-          if (cat.toLowerCase() !== normalizedCategory.toLowerCase() || diff !== normalizedDifficulty) {
-            questions[cat][diff].splice(index, 1);
-            const newCat = normalizedCategory.charAt(0).toUpperCase() + normalizedCategory.slice(1);
-            if (!questions[newCat]) {
-              questions[newCat] = {};
-            }
-            if (!questions[newCat][normalizedDifficulty]) {
-              questions[newCat][normalizedDifficulty] = [];
-            }
-            questions[newCat][normalizedDifficulty].push({
-              id: req.params.id,
-              question,
-              options,
-              correctAnswer
-            });
-          } else {
-            questions[cat][diff][index] = {
-              id: req.params.id,
-              question,
-              options,
-              correctAnswer
-            };
-          }
-          found = true;
-          break;
-        }
-      }
-      if (found) break;
-    }
-
-    if (!found) {
+    if (!questions[req.params.id]) {
       return res.status(404).json({ error: 'Question not found' });
     }
 
-    await questionBankRef.set(questions);
+    questions[req.params.id] = {
+      ...questions[req.params.id],
+      question,
+      options,
+      correctAnswer: parseInt(correctAnswer) || 0,
+      category,
+      difficulty: difficultyValue,
+      updatedAt: Date.now()
+    };
+
+    await questionsRef.set(questions);
+
+    console.log(`[/api/questions] Updated question: ${req.params.id}`);
     res.json({ success: true });
   } catch (error) {
     console.error('Error updating question:', error);
@@ -132,30 +101,18 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const questionBankRef = db.ref('questionBank');
-    const snapshot = await questionBankRef.once('value');
+    const questionsRef = db.ref('questions');
+    const snapshot = await questionsRef.once('value');
     const questions = snapshot.val() || {};
     
-    let found = false;
-    for (const cat in questions) {
-      for (const diff in questions[cat]) {
-        const index = questions[cat][diff].findIndex(
-          q => q.id === req.params.id
-        );
-        if (index !== -1) {
-          questions[cat][diff].splice(index, 1);
-          found = true;
-          break;
-        }
-      }
-      if (found) break;
-    }
-
-    if (!found) {
+    if (!questions[req.params.id]) {
       return res.status(404).json({ error: 'Question not found' });
     }
 
-    await questionBankRef.set(questions);
+    delete questions[req.params.id];
+    await questionsRef.set(questions);
+
+    console.log(`[/api/questions] Deleted question: ${req.params.id}`);
     res.json({ success: true });
   } catch (error) {
     console.error('Error deleting question:', error);

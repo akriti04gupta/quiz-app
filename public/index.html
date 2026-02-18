@@ -1,62 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .frame {
-            position: relative;
-            width: min(100vw, 56.25vh);
-            aspect-ratio: 9 / 16;
-        }
-        .frame img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .tap-area {
-            position: absolute;
-            left: 24.95%;
-            top: 80.77%;
-            width: 49.73%;
-            height: 4.93%;
-            border: none;
-            background: #ffffff;
-            color: #0d0d0d;
-            font-size: clamp(14px, 2vw, 18px);
-            font-weight: 600;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s ease, color 0.15s ease;
-            cursor: pointer;
-        }
-        .tap-area:hover,
-        .tap-area:active,
-        .tap-area:focus {
-            background: #ff3b00;
-            color: #ffffff;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRAK THE CODE!</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+
+/* ==== FIXED FIGMA CANVAS ==== */
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+
+/* ==== BACKGROUND ==== */
+.canvas{
+    position:absolute;
+    width:387px;
+    height:688px;
+    background:url("/assets/first/background.png") no-repeat center;
+    background-size:cover;
+}
+
+/* ==== LOGO ==== */
+.logo{
+    position:absolute;
+    top:42px;
+    left:50%;
+    transform:translateX(-50%);
+    width:105px;
+}
+
+/* ==== GIRL CARD ==== */
+.girl-image{
+    position:absolute;
+    top:120px;
+    left:50%;
+    transform:translateX(-50%);
+    width:270px;
+    border-radius:28px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.3);
+}
+
+/* ==== MILLIONAIRE BADGE ==== */
+.millionaire-badge{
+    position:absolute;
+    top:155px;
+    left:45px;
+    background:#fff;
+    padding:8px 16px;
+    font-size:12px;
+    border-radius:8px;
+    font-weight:600;
+    box-shadow:0 4px 12px rgba(0,0,0,0.35);
+    line-height:1.3;
+    text-align:center;
+    z-index:10;
+}
+
+/* ==== CRYPTO BADGE ==== */
+.crypto-badge{
+    position:absolute;
+    top:411px;
+    right:26px;
+    background:rgba(0,0,0,0.6);
+    padding:10px 16px;
+    border-radius:16px;
+    backdrop-filter:blur(10px);
+    z-index:10;
+}
+
+.crypto-badge small{
+    display:block;
+    font-size:10px;
+    color:#999;
+    margin-bottom:2px;
+}
+
+.crypto-badge strong{
+    font-size:16px;
+    color:#fff;
+    font-weight:700;
+}
+
+/* ==== MONEY BAGS ==== */
+.money-bags{
+    position:absolute;
+    top:350px;
+    left:0px;
+    width:135px;
+    z-index:5;
+}
+
+/* ==== TITLE ==== */
+.title{
+    position:absolute;
+    top:480px;
+    width:100%;
+    text-align:center;
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:-0.5px;
+}
+
+.title-main{ color:#fff; }
+.title-accent{ color:#ff4500; }
+
+/* ==== SUBTITLE ==== */
+.subtitle{
+    position:absolute;
+    top:520px;
+    width:300px;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+    font-size:13px;
+    color:#c8c8c8;
+    line-height:1.6;
+    font-weight:400;
+}
+
+/* ==== BUTTON ==== */
+.begin-button{
+    position:absolute;
+    bottom:50px;
+    left:50%;
+    transform:translateX(-50%);
+    width:260px;
+    padding:14px 0;
+    border-radius:999px;
+    border:none;
+    background:#fff;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    box-shadow:0 4px 12px rgba(255,255,255,0.1);
+}
+
+.begin-button:hover{
+    background:#ff4500;
+    color:#fff;
+    transform:translateX(-50%) translateY(-2px);
+    box-shadow:0 6px 20px rgba(255,69,0,0.4);
+}
+
+.begin-button:active{
+    transform:translateX(-50%) translateY(0);
+}
+</style>
 </head>
+
 <body>
-    <main class="frame">
-        <img src="/assets/Slide%2016_9%20-%2023.svg" alt="Slide 16_9 - 23">
-        <button class="tap-area" aria-label="Let's begin" onclick="location.href='quiz.html'">Let's Begin</button>
-    </main>
+
+<div class="canvas-wrapper" id="wrapper">
+    <div class="canvas"></div>
+
+    <img src="/assets/first/krak.png" class="logo">
+    <img src="/assets/first/girl.png" class="girl-image">
+
+    <!-- FIXED 2-LINE BADGE -->
+    <div class="millionaire-badge">
+        Be a <br> Millionaire!
+    </div>
+
+    <!-- CRYPTO -->
+    <div class="crypto-badge">
+        <small>Total earnings</small>
+        <strong>$100 Crypto</strong>
+    </div>
+
+    <!-- MONEY BAG -->
+    <img src="/assets/first/money_bags.png" class="money-bags">
+
+    <div class="title">
+        <span class="title-main">KRAK THE </span>
+        <span class="title-accent">CODE!</span>
+    </div>
+
+    <div class="subtitle">
+        Answer questions, climb levels, and prove your mastery.
+        One wrong move ends it all.
+    </div>
+
+    <button class="begin-button" onclick="location.href='quiz.html'">
+        Let’s Begin
+    </button>
+</div>
+
+<script>
+function scaleCanvas(){
+    const wrapper=document.getElementById("wrapper");
+    const scaleX=window.innerWidth/387;
+    const scaleY=window.innerHeight/688;
+    const scale=Math.min(scaleX,scaleY);
+    wrapper.style.transform=`scale(${scale})`;
+}
+
+scaleCanvas();
+window.addEventListener("resize",scaleCanvas);
+</script>
+
 </body>
 </html>

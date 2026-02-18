@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wrong Overlay Preview</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CANVAS WRAPPER - Same as actual_quiz.html */
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+
+.canvas{
+    position:absolute;
+    width:387px;
+    height:688px;
+    background:url("/assets/fifth/background.png") no-repeat center;
+    background-size:cover;
+    overflow:hidden;
+}
+
+.bg-img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* WRONG OVERLAY */
+.wrong-overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.wrong-overlay.show{display:flex;}
+
+.wrong-bg{
+    position:absolute;
+    width:90%;
+    height:50%;
+    opacity:.85;
+    z-index:5;
+}
+
+.wrong-cross{
+    width:240px;
+    height:auto;
+    z-index:10;
+}
+</style>
+</head>
+<body>
+    <div class="canvas-wrapper" id="wrapper">
+        <div class="canvas">
+            <img src="/assets/fifth/background.png" class="bg-img" alt="Background">
+            <div class="wrong-overlay show">
+                <img src="/assets/quiz/wrong_background.png" class="wrong-bg" alt="Wrong background">
+                <img src="/assets/quiz/wrong_cross.png" class="wrong-cross" alt="Wrong cross">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function scaleCanvas(){
+            const wrapper = document.getElementById("wrapper");
+            const scale = Math.min(window.innerWidth / 387, window.innerHeight / 688);
+            wrapper.style.transform = `scale(${scale})`;
+        }
+        scaleCanvas();
+        window.addEventListener("resize", scaleCanvas);
+    </script>
+</body>
+</html>

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz - KRAK THE CODE!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Inter',sans-serif;
+}
+
+/* CANVAS */
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+.canvas{
+    position:absolute;
+    width:387px;
+    height:688px;
+    background:url("/assets/fifth/background.png") no-repeat center;
+    background-size:cover;
+}
+
+/* BACK BUTTON */
+.vector-bg{
+    position:absolute;
+    top:18px;
+    left:18px;
+    width:32px;
+    z-index:100;
+}
+.vector-icon{
+    position:absolute;
+    top:25px;
+    left:26px;
+    width:18px;
+    z-index:101;
+}
+
+/* COUNTDOWN SCREEN (UNCHANGED) */
+.countdown-screen{
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+.countdown-text{
+    position:absolute;
+    top:205px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:20px;
+    font-weight:800;
+    color:#fff;
+    display:flex;
+    gap:12px;
+}
+.countdown-num{
+    font-size:28px;
+    color:#666;
+}
+.countdown-num.active{
+    color:#ff3b00;
+}
+.coins-img{
+    position:absolute;
+    top:260px;
+    left:50%;
+    transform:translateX(-50%);
+    width:255px;
+}
+.level-section{
+    position:absolute;
+    top:415px;
+    width:100%;
+    text-align:center;
+}
+.level-title{
+    font-size:34px;
+    font-weight:800;
+    color:#fff;
+}
+.level-title span{color:#ff3b00;}
+.level-subtitle{
+    font-size:13px;
+    font-weight:600;
+    color:#fff;
+}
+.progress-section{
+    position:absolute;
+    bottom:55px;
+    left:50%;
+    transform:translateX(-50%);
+    width:235px;
+}
+.container-img{width:100%;}
+
+/* ================= QUIZ SCREEN ================= */
+
+.quiz-screen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:none;
+    background:url("/assets/quiz/background.png") no-repeat center;
+    background-size:cover;
+}
+
+/* HEADER */
+.quiz-header{
+    position:absolute;
+    top:85px;
+    left:25px;
+    right:25px;
+    display:flex;
+    justify-content:space-between;
+}
+.quiz-level{
+    font-size:18px;
+    font-weight:800;
+    color:#fff;
+}
+.quiz-level span{color:#ff3b00;}
+.quiz-score{
+    font-size:18px;
+    font-weight:800;
+    color:#fff;
+}
+
+/* TOP PROGRESS */
+.progress-bar-top{
+    position:absolute;
+    top:120px;
+    left:25px;
+    right:25px;
+    height:6px;
+    background:#ddd;
+    border-radius:3px;
+    overflow:hidden;
+}
+.progress-fill-top{
+    height:100%;
+    width:33.33%;
+    background:#ff3b00;
+    transition:width .4s ease;
+}
+
+/* QUESTION INFO */
+.question-info{
+    position:absolute;
+    top:140px;
+    left:25px;
+    right:25px;
+    display:flex;
+    justify-content:space-between;
+}
+.question-number{
+    font-size:14px;
+    font-weight:600;
+    color:#ff3b00;
+}
+.timer{
+    font-size:18px;
+    font-weight:800;
+    color:#fff;
+}
+
+/* QUESTION */
+.question-content{
+    position:absolute;
+    top:190px;
+    left:25px;
+    right:25px;
+}
+.question-text{
+    font-size:24px;
+    font-weight:800;
+    color:#fff;
+    margin-bottom:30px;
+}
+
+/* ANSWERS */
+.answers{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+.answer-option{
+    background:#444;
+    border-radius:10px;
+    padding:18px;
+    display:flex;
+    gap:14px;
+    align-items:center;
+    cursor:pointer;
+    transition:.3s;
+}
+.answer-letter{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#000;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+}
+.answer-text{
+    font-size:16px;
+    font-weight:600;
+    color:#fff;
+}
+.answer-option.selected{background:#e10600;}
+.answer-option.correct{background:#34a853;}
+.answer-option.wrong{background:#e10600;}
+
+/* COIN ANIMATION */
+.coin-animation{
+    position:absolute;
+    top:60px;
+    right:15px;
+    width:120px;
+    display:none;
+}
+.coin-animation.show{
+    display:block;
+    animation:coinDrop 1s ease;
+}
+@keyframes coinDrop{
+    from{transform:translateY(-80px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+}
+
+/* WRONG OVERLAY */
+.wrong-overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.wrong-overlay.show{display:flex;}
+
+.wrong-bg{
+    position:absolute;
+    width:90%;
+    height:50%;
+    opacity:.85;
+    z-index:5;
+}
+
+.wrong-cross{
+    width:240px;
+    height:auto;
+    z-index:10;
+}
+
+/* ================= GAME OVER SCREEN ================= */
+
+.result-screen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:none;
+}
+.result-screen.show{
+    display:block;
+}
+
+/* background EXACT */
+.result-bg{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* back button (DO NOT MODIFY VECTOR FILES) */
+.result-vector-bg{
+    position:absolute;
+    top:18px;
+    left:18px;
+    width:34px;
+    z-index:5;
+}
+.result-vector-icon{
+    position:absolute;
+    top:26px;
+    left:26px;
+    width:18px;
+    z-index:6;
+    cursor:pointer;
+}
+
+/* warning triangle image */
+.result-logo{
+    position:absolute;
+    top:105px;
+    left:50%;
+    transform:translateX(-50%);
+    width:140px;
+}
+
+/* GAME OVER text image */
+.result-over{
+    position:absolute;
+    top:195px;
+    left:50%;
+    transform:translateX(-50%);
+    width:260px;
+}
+
+/* coins away text */
+.result-coins-text{
+    position:absolute;
+    top:305px;
+    left:50%;
+    transform:translateX(-50%);
+    width:320px;
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    color:#ffffff;
+    line-height:1.4;
+}
+.result-coins-text span{
+    color:#ff3b00;
+    font-weight:800;
+}
+
+/* stats section */
+.result-stats{
+    position:absolute;
+    top:360px;
+    left:50%;
+    transform:translateX(-50%);
+    width:320px;
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+}
+
+.result-stat-box{
+    width:152px;
+    height:78px;
+    background:rgba(25,25,25,0.95);
+    border-radius:8px;
+    padding:12px 14px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.stat-label{
+    font-size:12px;
+    font-weight:600;
+    color:#ff3b00;
+    margin-bottom:6px;
+}
+
+.stat-value{
+    font-size:22px;
+    font-weight:800;
+    color:#ffffff;
+}
+
+/* buttons EXACT */
+.result-retry-btn{
+    position:absolute;
+    top:470px;
+    left:50%;
+    transform:translateX(-50%);
+    width:320px;
+    height:48px;
+    border:none;
+    border-radius:999px;
+    background:#ffffff;
+    color:#000;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+}
+
+.result-home-btn{
+    position:absolute;
+    top:535px;
+    left:50%;
+    transform:translateX(-50%);
+    width:320px;
+    height:48px;
+    border:none;
+    border-radius:999px;
+    background:#ff3b00;
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+}
+
+/* milestone progress */
+.result-progress{
+    position:absolute;
+    bottom:32px;
+    left:50%;
+    transform:translateX(-50%);
+    width:320px;
+}
+
+.result-progress-container{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+    align-items:center;
+}
+
+/* line */
+.result-progress-container::before{
+    content:'';
+    position:absolute;
+    top:11px;
+    left:15px;
+    right:15px;
+    height:2px;
+    background:rgba(255,255,255,0.2);
+}
+
+/* milestone circle */
+.result-milestone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    z-index:2;
+}
+
+.result-milestone-status{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:#2b2b2b;
+    border:2px solid #444;
+}
+
+.result-milestone.active .result-milestone-status{
+    background:#ff3b00;
+    border-color:#ff3b00;
+}
+
+.result-milestone span{
+    font-size:9px;
+    color:#888;
+    max-width:70px;
+    text-align:center;
+}
+
+.result-milestone.active span{
+    color:#fff;
+}
+
+</style>
+</head>
+
+<body>
+<div class="canvas-wrapper">
+<div class="canvas">
+
+<a href="quiz_game.html">
+<img src="/assets/fifth/vector_background.png" class="vector-bg">
+<img src="/assets/fifth/vector.png" class="vector-icon">
+</a>
+
+<!-- COUNTDOWN -->
+<div class="countdown-screen" id="countdownScreen">
+<div class="countdown-text">
+<span>Starts in</span>
+<span class="countdown-num active" id="num3">3</span>
+<span class="countdown-num" id="num2">2</span>
+<span class="countdown-num" id="num1">1</span>
+</div>
+<img src="/assets/fifth/coins.png" class="coins-img">
+<div class="level-section">
+<div class="level-title">Level <span id="countdown-level">1</span></div>
+<div class="level-subtitle" id="countdown-subtitle">Answer 3 Simple Question!</div>
+</div>
+<div class="progress-section">
+<img src="/assets/fifth/container.png" class="container-img">
+</div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-screen" id="quizScreen">
+<div class="quiz-header">
+<div class="quiz-level">Level <span id="current-level">1</span></div>
+<div class="quiz-score"><span id="coins-display">0</span> Coins</div>
+</div>
+
+<div class="progress-bar-top">
+<div class="progress-fill-top" id="progress-fill"></div>
+</div>
+
+<div class="question-info">
+<div class="question-number">Question <span id="question-num">1</span>/3</div>
+<div class="timer" id="timer">00:45</div>
+</div>
+
+<div class="question-content">
+<div class="question-text" id="question-text"></div>
+<div class="answers" id="answers-container"></div>
+</div>
+
+<div class="coin-animation" id="coin-animation"></div>
+
+<div class="wrong-overlay" id="wrong-overlay">
+<img src="/assets/quiz/wrong_background.png" class="wrong-bg">
+<img src="/assets/quiz/wrong_cross.png" class="wrong-cross">
+</div>
+</div>
+
+<div class="result-screen" id="result-screen">
+<img src="/assets/game_over/background.png" class="result-bg">
+
+<a href="quiz_game.html">
+<img src="/assets/game_over/vector_background.png" class="result-vector-bg">
+<img src="/assets/game_over/vector.png" class="result-vector-icon">
+</a>
+
+<img src="/assets/game_over/logo.png" class="result-logo">
+<img src="/assets/game_over/over.png" class="result-over">
+
+<div class="result-coins-text" id="result-coins-text">You were <span id="result-coins-amount">0</span> coins from the next level!</div>
+
+<div class="result-stats">
+<div class="result-stat-item">
+<div class="result-stat-label">Total Coins</div>
+<div class="result-stat-value" id="result-total-coins">0 Coins</div>
+</div>
+<div class="result-stat-item">
+<div class="result-stat-label">Question Answered</div>
+<div class="result-stat-value" id="result-questions-answered">0</div>
+</div>
+</div>
+
+<button id="retry-btn" class="result-retry-btn">Play Again!</button>
+<button id="home-btn" class="result-home-btn">Home</button>
+
+<div class="result-progress">
+<div class="result-progress-container">
+<div class="result-milestone" id="milestone-1">
+<div class="result-milestone-status"></div>
+<span>Small Prize</span>
+</div>
+<div class="result-milestone" id="milestone-2">
+<div class="result-milestone-status"></div>
+<span>Driver Card</span>
+</div>
+<div class="result-milestone" id="milestone-3">
+<div class="result-milestone-status"></div>
+<span>Merch</span>
+</div>
+<div class="result-milestone" id="milestone-4">
+<div class="result-milestone-status"></div>
+<span>$100 Crypto</span>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const TOTAL_LEVELS = 4;
+const QUESTIONS_PER_LEVEL = 3;
+const QUESTION_TIME = 45;
+const letters = ['A','B','C','D'];
+
+let currentLevel = 1;
+let currentQuestion = 0;
+let score = 0;
+let totalCorrect = 0;
+let levelCorrect = 0;
+let timerInterval = null;
+let timeLeft = QUESTION_TIME;
+let quizStart = null;
+let submitted = false;
+let questionsByLevel = [];
+let answersLog = [];
+let questionsAnswered = 0;
+const seenQuestionIds = new Set();
+
+const playerName = localStorage.getItem('playerName') || '';
+const retryBtn = document.getElementById('retry-btn');
+retryBtn.addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+
+const retryBtn2 = document.getElementById('home-btn');
+if(retryBtn2){
+    retryBtn2.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+}
+
+function scaleCanvas(){
+    const wrapper=document.querySelector('.canvas-wrapper');
+    const scale=Math.min(window.innerWidth/387,window.innerHeight/688);
+    wrapper.style.transform=`scale(${scale})`;
+}
+scaleCanvas();
+window.addEventListener("resize",scaleCanvas);
+
+async function initQuiz(){
+    if(!playerName){
+        window.location.href = 'quiz.html';
+        return;
+    }
+
+    try{
+        const res = await fetch('http://localhost:3000/api/quiz/start');
+        const data = await res.json();
+
+        if(!res.ok){
+            const required = data.requiredPerDifficulty || QUESTIONS_PER_LEVEL;
+            const counts = data.counts || {};
+            const message = data.error || 'Failed to load quiz questions';
+            throw new Error(`${message}. Need ${required} per difficulty. Current: easy=${counts.easy ?? 0}, medium=${counts.medium ?? 0}, hard=${counts.hard ?? 0}, veryHard=${counts.veryHard ?? 0}`);
+        }
+
+        const list = Array.isArray(data.questions) ? data.questions : [];
+
+        if(list.length < TOTAL_LEVELS * QUESTIONS_PER_LEVEL){
+            throw new Error('Not enough questions returned');
+        }
+
+        questionsByLevel = [];
+        for(let i=0;i<TOTAL_LEVELS;i++){
+            const start = i * QUESTIONS_PER_LEVEL;
+            questionsByLevel.push(list.slice(start, start + QUESTIONS_PER_LEVEL));
+        }
+    }catch(err){
+        console.error('Failed to load questions from Firebase:', err);
+        alert(`❌ ${err.message}`);
+        window.location.href = 'quiz.html';
+        return;
+    }
+
+    quizStart = Date.now();
+    showCountdown(currentLevel);
+}
+
+function showCountdown(level){
+    const countdownScreen = document.getElementById('countdownScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const num3 = document.getElementById('num3');
+    const num2 = document.getElementById('num2');
+    const num1 = document.getElementById('num1');
+
+    document.getElementById('countdown-level').textContent = level;
+    document.getElementById('countdown-subtitle').textContent = getLevelSubtitle(level);
+
+    num3.classList.add('active');
+    num2.classList.remove('active');
+    num1.classList.remove('active');
+
+    countdownScreen.style.display = 'block';
+    quizScreen.style.display = 'none';
+
+    setTimeout(() => {
+        num3.classList.remove('active');
+        num2.classList.add('active');
+    }, 1000);
+
+    setTimeout(() => {
+        num2.classList.remove('active');
+        num1.classList.add('active');
+    }, 2000);
+
+    setTimeout(() => {
+        startLevel();
+    }, 3000);
+}
+
+function getLevelSubtitle(level){
+    if(level === 1) return 'Answer 3 Simple Question!';
+    if(level === 2) return 'Answer 3 Medium Question!';
+    if(level === 3) return 'Answer 3 Hard Question!';
+    return 'Answer 3 Expert Question!';
+}
+
+function startLevel(){
+    levelCorrect = 0;
+    currentQuestion = 0;
+    document.getElementById('countdownScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'block';
+    document.getElementById('current-level').textContent = currentLevel;
+    loadQuestion();
+}
+
+function loadQuestion(){
+    timeLeft = QUESTION_TIME;
+    updateTimer();
+    startTimer();
+
+    const q = questionsByLevel[currentLevel - 1][currentQuestion];
+    document.getElementById('question-text').innerText = q.question;
+    document.getElementById('question-num').innerText = currentQuestion + 1;
+    document.getElementById('coins-display').innerText = score;
+
+    document.getElementById('progress-fill').style.width = ((currentQuestion + 1) / QUESTIONS_PER_LEVEL * 100) + '%';
+
+    const container = document.getElementById('answers-container');
+    container.innerHTML = '';
+
+    q.answers.forEach((ans, i) => {
+        const div = document.createElement('div');
+        div.className = 'answer-option';
+        div.innerHTML = `<div class="answer-letter">${letters[i]}</div><div class="answer-text">${ans}</div>`;
+        div.onclick = () => selectAnswer(div, i, q.correct, q);
+        container.appendChild(div);
+    });
+
+    // Mark as used after render to ensure it was actually shown.
+    requestAnimationFrame(() => markQuestionUsed(q));
+}
+
+async function markQuestionUsed(question){
+    if(!question || !question.id || !question.difficulty) return;
+    if(seenQuestionIds.has(question.id)) return;
+    seenQuestionIds.add(question.id);
+
+    try{
+        await fetch('http://localhost:3000/api/quiz/mark-used', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                questionId: question.id,
+                difficulty: question.difficulty
+            })
+        });
+    }catch(err){
+        console.error('Failed to mark question as used:', err);
+    }
+}
+
+function startTimer(){
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if(timeLeft <= 0){
+            clearInterval(timerInterval);
+            handleWrongAnswer(-1, null);
+        }
+    }, 1000);
+}
+
+function updateTimer(){
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    document.getElementById('timer').innerText =
+        String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function selectAnswer(option, selected, correct, question){
+    clearInterval(timerInterval);
+    document.querySelectorAll('.answer-option').forEach(o => o.style.pointerEvents = 'none');
+
+    option.classList.add('selected');
+
+    setTimeout(() => {
+        option.classList.remove('selected');
+
+        if(selected === correct){
+            option.classList.add('correct');
+            score += 10;
+            totalCorrect++;
+            levelCorrect++;
+            document.getElementById('coins-display').innerText = score;
+
+            logAnswer(question, selected, correct, true);
+            showCoinAnimation();
+            setTimeout(nextQuestion, 1500);
+        }else{
+            option.classList.add('wrong');
+            logAnswer(question, selected, correct, false);
+            showWrongOverlay();
+            setTimeout(showGameOver, 2000);
+        }
+    }, 2000);
+}
+
+function handleWrongAnswer(userAnswer, question){
+    const q = question || questionsByLevel[currentLevel - 1][currentQuestion];
+    logAnswer(q, userAnswer, q.correct, false);
+    showGameOver();
+}
+
+function logAnswer(question, userAnswer, correctAnswer, isCorrect){
+    answersLog.push({
+        questionId: question.id || '',
+        question: question.question || '',
+        userAnswer: userAnswer,
+        correctAnswer: correctAnswer,
+        isCorrect: isCorrect
+    });
+    questionsAnswered = answersLog.length;
+}
+
+function showCoinAnimation(){
+    const el = document.getElementById('coin-animation');
+    el.innerHTML = `<img src="/assets/quiz/coins.png" width="100%">
+<img src="/assets/quiz/10coins.png" style="position:absolute;top:40px;right:0;width:90px;">`;
+    el.classList.add('show');
+    setTimeout(() => { el.classList.remove('show'); el.innerHTML = ''; }, 1000);
+}
+
+function showWrongOverlay(){
+    document.getElementById('wrong-overlay').classList.add('show');
+    setTimeout(() => { document.getElementById('wrong-overlay').classList.remove('show'); }, 2000);
+}
+
+function nextQuestion(){
+    currentQuestion++;
+    if(currentQuestion >= QUESTIONS_PER_LEVEL){
+        if(levelCorrect === QUESTIONS_PER_LEVEL){
+            if(currentLevel < TOTAL_LEVELS){
+                currentLevel++;
+                showCountdown(currentLevel);
+            }else{
+                showUnlocked();
+            }
+        }else{
+            showGameOver();
+        }
+    }else{
+        loadQuestion();
+    }
+}
+
+function showGameOver(){
+    endGame(false);
+}
+
+function showUnlocked(){
+    endGame(true);
+}
+
+function endGame(isWin){
+    clearInterval(timerInterval);
+    document.getElementById('quizScreen').style.display = 'none';
+    const r = document.getElementById('result-screen');
+    r.classList.add('show');
+    
+    // Calculate coins away from next level
+    const nextLevelCoins = (currentLevel) * 30;
+    const coinsAway = nextLevelCoins - score;
+    document.getElementById('result-coins-amount').textContent = coinsAway;
+    
+    // Set total coins
+    document.getElementById('result-total-coins').textContent = score + ' Coins';
+    
+    // Set questions answered
+    document.getElementById('result-questions-answered').textContent = questionsAnswered;
+    
+    // Highlight milestones based on level reached
+    for(let i = 1; i <= 4; i++){
+        const milestone = document.getElementById('milestone-' + i);
+        if(milestone && i <= currentLevel){
+            milestone.classList.add('active');
+        }
+    }
+    
+    submitAttempt();
+}
+
+async function submitAttempt(){
+    if(submitted) return;
+    submitted = true;
+
+    const timeTaken = Math.max(0, Math.round((Date.now() - quizStart) / 1000));
+    const totalQuestions = TOTAL_LEVELS * QUESTIONS_PER_LEVEL;
+    const levelReached = Math.min(TOTAL_LEVELS, Math.max(1, currentLevel));
+
+    try{
+        await fetch('http://localhost:3000/api/quiz/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                answers: answersLog,
+                totalQuestions: totalQuestions,
+                questionsAnswered: questionsAnswered,
+                levelReached: levelReached,
+                playerName: playerName,
+                timeTaken: timeTaken,
+                score: totalCorrect
+            })
+        });
+    }catch(err){
+        console.error('Failed to submit quiz attempt:', err);
+    }
+}
+
+initQuiz();
+</script>
+
+</body>
+</html>

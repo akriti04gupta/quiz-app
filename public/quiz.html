@@ -1,321 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Application</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-        }
-        .frame {
-            position: relative;
-            width: min(100vw, 56.25vh);
-            aspect-ratio: 9 / 16;
-        }
-        .frame img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .tap-area {
-            position: absolute;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        }
-        .back-btn {
-            left: 5.96%;
-            top: 7.40%;
-            width: 7.97%;
-            height: 4.48%;
-        }
-        .name-input {
-            position: absolute;
-            left: 7.87%;
-            top: 41.00%;
-            width: 59.93%;
-            height: 4.84%;
-            border: none;
-            background: transparent;
-            color: #0d0d0d;
-            font-size: clamp(14px, 2.2vw, 22px);
-            padding: 0 12px;
-            font-weight: 500;
-        }
-        .name-input::placeholder {
-            color: rgba(13, 13, 13, 0.5);
-        }
-        .name-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .start-btn {
-            left: 7.35%;
-            top: 48.41%;
-            width: 49.73%;
-            height: 4.93%;
-            background: #ffffff;
-            color: #0d0d0d;
-            font-size: clamp(14px, 2vw, 18px);
-            font-weight: 600;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
-        .start-btn:hover,
-        .start-btn:active,
-        .start-btn:focus {
-            background: #ff3b00;
-            color: #ffffff;
-        }
-        .quiz-panel {
-            position: absolute;
-            color: white;
-            font-size: clamp(12px, 1.7vw, 18px);
-            line-height: 1.4;
-        }
-        .question-panel {
-            left: 47.78%;
-            top: 75.16%;
-            width: 42.99%;
-            height: 13.48%;
-        }
-        .options-panel {
-            left: 9.26%;
-            top: 78.12%;
-            width: 33.39%;
-            height: 10.44%;
-        }
-        .meta {
-            font-size: clamp(10px, 1.5vw, 14px);
-            color: rgba(255, 255, 255, 0.75);
-            margin-bottom: 6px;
-        }
-        .question-text {
-            font-weight: 600;
-        }
-        .option {
-            display: block;
-            padding: 4px 0;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        .option.selected {
-            text-decoration: underline;
-        }
-        .status {
-            margin-top: 6px;
-            font-size: clamp(10px, 1.5vw, 14px);
-            color: rgba(255, 255, 255, 0.75);
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRAK THE CODE! - Quiz</title>
+
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Inter',sans-serif;
+}
+
+/* CANVAS */
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+
+.canvas{
+    position:absolute;
+    width:387px;
+    height:688px;
+    background:url("/assets/second/background.png") no-repeat center;
+    background-size:cover;
+}
+
+/* VECTOR TOP LEFT */
+.vector-bg{
+    position:absolute;
+    top:18px;
+    left:18px;
+    width:36px;
+}
+
+.vector-icon{
+    position:absolute;
+    top:26px;
+    left:27px;
+    width:20px;
+}
+
+/* TITLE */
+.title{
+    position:absolute;
+    top:85px;
+    left:30px;
+    right:30px;
+    font-size:32px;
+    font-weight:600;
+    line-height:1.1;
+    color:#fff;
+}
+
+.title span{color:#ff3b00;}
+
+.subtitle{
+    position:absolute;
+    top:180px;
+    left:30px;
+    right:30px;
+    font-size:13px;
+    color:#d0d0d0;
+}
+
+/* INPUT */
+.input-section{
+    position:absolute;
+    top:230px;
+    left:30px;
+    right:30px;
+}
+
+.input-label{
+    font-size:12px;
+    color:#e0e0e0;
+    margin-bottom:6px;
+    display:block;
+}
+
+.input-field{
+    width:85%;
+    padding:12px;
+    border-radius:6px;
+    border:none;
+    background:#ffffff;
+    font-size:13px;
+    color:#000;
+}
+
+/* BEGIN BUTTON */
+.begin-btn{
+    position:absolute;
+    top:305px;
+    left:35%;
+    transform:translateX(-50%);
+    width:200px;
+    padding:12px 0;
+    border-radius:999px;
+    border:none;
+    background:#fff;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    box-shadow:0 4px 12px rgba(255,255,255,0.1);
+}
+
+.begin-btn:hover{
+    background:#ff3b00;
+    color:#fff;
+    transform:translateX(-50%) translateY(-2px);
+    box-shadow:0 6px 20px rgba(255,59,0,0.4);
+}
+
+.begin-btn:active{
+    transform:translateX(-50%) translateY(0);
+}
+
+/* BADGE IMAGES */
+.today-badge{
+    position:absolute;
+    top:380px;
+    left:30px;
+    width:130px;
+}
+.code-title{
+    position:absolute;
+    top:110px;
+    left:30px;
+    width:369px;
+}
+
+.alltime-badge{
+    position:absolute;
+    top:520px;
+    left:30px;
+    width:110px;
+}
+
+/* STATS TEXT */
+.stats-container{
+    position:absolute;
+    left:30px;
+    right:30px;
+    display:flex;
+    gap:12px;
+    flex-direction:row;
+}
+
+.stats-container.today-stats{ top:430px; }
+.stats-container.alltime-stats{ top:570px; }
+
+.stat-item{
+    flex:1;
+    background:rgba(0,0,0,0.5);
+    padding:12px;
+    border-radius:8px;
+}
+
+.stat-label{
+    font-size:12px;
+    color:#ffffff;
+    margin-bottom:4px;
+}
+
+.stat-value{
+    font-size:22px;
+    font-weight:600;
+    color:#ff3b00;
+    line-height:1.1;
+    font-family:'Inter',sans-serif;
+}
+.stat-name{
+    font-size:12px;
+    color:#d0d0d0;
+    margin-top:4px;
+}
+
+.hidden{display:none!important;}
+</style>
 </head>
+
 <body>
-    <main class="frame">
-        <img src="/assets/Slide%2016_9%20-%2024.svg" alt="Slide 16_9 - 24">
 
-        <button class="tap-area back-btn" aria-label="Back" onclick="location.href='index.html'"></button>
-        <input class="name-input" id="playerName" type="text" placeholder="Your name">
-        <button class="tap-area start-btn" id="startBtn" aria-label="Start quiz">Let's Begin</button>
+<div class="canvas-wrapper" id="wrapper">
+    <div class="canvas"></div>
 
-        <div id="quizScreen" class="hidden">
-            <div class="quiz-panel question-panel">
-                <div class="meta" id="playerDisplay"></div>
-                <div class="meta" id="questionNumber"></div>
-                <div class="meta" id="pointsDisplay"></div>
-                <div class="question-text" id="questionText"></div>
-                <div class="status" id="statusBox"></div>
-            </div>
-            <div class="quiz-panel options-panel" id="optionsContainer"></div>
+    <!-- VECTOR DECORATION -->
+    <div class="back-wrapper" onclick="location.href='index.html'">
+    <img src="/assets/second/vector_background.png" class="vector-bg">
+    <img src="/assets/second/vector.png" class="vector-icon">
+</div>
+
+
+    <!-- START SCREEN -->
+    <div id="startScreen">
+
+        <img src="/assets/second/code.png" class="code-title">
+
+
+        
+
+        <div class="input-section">
+            <label class="input-label">Full Name</label>
+            <input id="playerName" class="input-field" placeholder="Enter your full name">
         </div>
-    </main>
 
-    <script>
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let currentPoints = 0;
-        let playerName = '';
-        let allAnswers = [];
-        let quizStartTime = null;
+        <!-- BEGIN BUTTON -->
+        <button class="begin-btn" id="startBtn">Let's Begin</button>
 
-        const startBtn = document.getElementById('startBtn');
-        const playerNameInput = document.getElementById('playerName');
-        const quizScreen = document.getElementById('quizScreen');
-        const optionsContainer = document.getElementById('optionsContainer');
-        const statusBox = document.getElementById('statusBox');
+        <!-- TODAY -->
+        <img src="/assets/second/best.png" class="today-badge">
 
-        startBtn.addEventListener('click', startQuiz);
-        playerNameInput.addEventListener('keypress', function (event) {
-            if (event.key === 'Enter') {
-                startQuiz();
-            }
-        });
+        <div class="stats-container today-stats">
+            <div class="stat-item">
+                <div class="stat-label">Top score:</div>
+                <div id="todayTopScore" class="stat-value">0 Coins</div>
+                <div id="todayTopName" class="stat-name">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Fastest Completion Time:</div>
+                <div id="todayFastestTime" class="stat-value">00:00</div>
+            </div>
+        </div>
 
-        async function startQuiz() {
-            playerName = playerNameInput.value.trim();
-            if (!playerName) {
-                alert('Please enter your name');
-                return;
-            }
+        <!-- ALL TIME -->
+        <img src="/assets/second/best2.png" class="alltime-badge">
 
-            try {
-                const response = await fetch('http://localhost:3000/api/quiz/start');
-                if (!response.ok) {
-                    throw new Error('Failed to load quiz: ' + response.status);
-                }
+        <div class="stats-container alltime-stats">
+            <div class="stat-item">
+                <div class="stat-label">Top score:</div>
+                <div id="allTimeTopScore" class="stat-value">0 Coins</div>
+                <div id="allTimeTopName" class="stat-name">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Fastest Completion Time:</div>
+                <div id="allTimeFastestTime" class="stat-value">00:00</div>
+            </div>
+        </div>
 
-                const data = await response.json();
-                questions = data.questions || [];
-                if (questions.length === 0) {
-                    throw new Error('No questions returned from server');
-                }
+    </div>
+</div>
 
-                quizStartTime = Date.now();
-                playerNameInput.classList.add('hidden');
-                startBtn.classList.add('hidden');
-                quizScreen.classList.remove('hidden');
-                displayQuestion();
-            } catch (error) {
-                alert('Error loading quiz: ' + error.message + '\n\nMake sure the server is running.');
-            }
+<script>
+function scaleCanvas(){
+    const wrapper=document.getElementById("wrapper");
+    const scale=Math.min(window.innerWidth/387,window.innerHeight/688);
+    wrapper.style.transform=`scale(${scale})`;
+}
+scaleCanvas();
+window.addEventListener("resize",scaleCanvas);
+
+document.getElementById("startBtn").onclick=function(){
+    const name=document.getElementById("playerName").value.trim();
+    if(!name){alert("Enter your name");return;}
+    localStorage.setItem("playerName", name);
+    window.location.href="actual_quiz.html";
+};
+
+document.getElementById("playerName").addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        document.getElementById("startBtn").click();
+    }
+});
+
+async function loadLeaderboard(){
+    try{
+        const res=await fetch('http://localhost:3000/api/quiz/leaderboard');
+        const data=await res.json();
+
+        if(data.today?.[0]){
+            const todayCoins = data.today[0].points ?? (data.today[0].score * 10);
+            document.getElementById('todayTopScore').textContent=todayCoins+" Coins";
+            document.getElementById('todayFastestTime').textContent=formatTime(data.today[0].timeTaken||0);
+            document.getElementById('todayTopName').textContent=data.today[0].playerName || 'Anonymous';
         }
 
-        function displayQuestion() {
-            const question = questions[currentQuestionIndex];
-            document.getElementById('playerDisplay').textContent = 'Player: ' + playerName;
-            document.getElementById('questionNumber').textContent = 'Question ' + (currentQuestionIndex + 1) + ' of ' + questions.length;
-            document.getElementById('pointsDisplay').textContent = 'Points: ' + currentPoints;
-            document.getElementById('questionText').textContent = question.question;
-            statusBox.textContent = '';
-
-            optionsContainer.innerHTML = question.options.map((option, index) => `
-                <div class="option" data-index="${index}" onclick="selectOption(${index})">${index}. ${option}</div>
-            `).join('');
+        if(data.allTime?.[0]){
+            const allTimeCoins = data.allTime[0].points ?? (data.allTime[0].score * 10);
+            document.getElementById('allTimeTopScore').textContent=allTimeCoins+" Coins";
+            document.getElementById('allTimeFastestTime').textContent=formatTime(data.allTime[0].timeTaken||0);
+            document.getElementById('allTimeTopName').textContent=data.allTime[0].playerName || 'Anonymous';
         }
+    }catch(e){}
+}
 
-        function selectOption(optionIndex) {
-            const question = questions[currentQuestionIndex];
-            const userAnswer = optionIndex;
-            const isCorrect = userAnswer === question.correctAnswer;
+function formatTime(s){
+    const n = parseInt(s);
+    const m=Math.floor(n/60);
+    const sec=n%60;
+    return m.toString().padStart(2,'0')+":"+sec.toString().padStart(2,'0');
+}
 
-            allAnswers.push({
-                questionId: question.id,
-                question: question.question,
-                userAnswer: userAnswer,
-                correctAnswer: question.correctAnswer,
-                isCorrect: isCorrect
-            });
+loadLeaderboard();
+</script>
 
-            const optionElements = document.querySelectorAll('.option');
-            optionElements.forEach((el, i) => {
-                el.classList.toggle('selected', i === optionIndex);
-            });
-
-            if (isCorrect) {
-                currentPoints += 10;
-                statusBox.textContent = 'Correct! +10 points';
-            } else {
-                statusBox.textContent = 'Wrong answer. Ending quiz.';
-            }
-
-            setTimeout(() => {
-                if (isCorrect) {
-                    currentQuestionIndex += 1;
-                    if (currentQuestionIndex < questions.length) {
-                        displayQuestion();
-                    } else {
-                        endQuiz();
-                    }
-                } else {
-                    endQuiz(true);
-                }
-            }, 900);
-        }
-
-        async function endQuiz(endedEarly = false) {
-            try {
-                const timeTaken = Math.floor((Date.now() - quizStartTime) / 1000);
-                const correctAnswers = allAnswers.filter(a => a.isCorrect).length;
-
-                // Disable all interactive elements during submission
-                disableQuizInteraction();
-                statusBox.textContent = 'Saving your quiz...';
-
-                const response = await fetch('http://localhost:3000/api/quiz/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        answers: allAnswers,
-                        totalQuestions: questions.length,
-                        playerName: playerName,
-                        timeTaken: timeTaken,
-                        score: correctAnswers
-                    })
-                });
-
-                const result = await response.json();
-                if (result.error) {
-                    alert('Error saving quiz: ' + result.error);
-                    return;
-                }
-
-                const displayPoints = result.points || currentPoints;
-                const hours = Math.floor(timeTaken / 3600);
-                const minutes = Math.floor((timeTaken % 3600) / 60);
-                const seconds = timeTaken % 60;
-                let timeDisplay = '';
-                if (hours > 0) timeDisplay += hours + 'h ';
-                if (minutes > 0 || hours > 0) timeDisplay += minutes + 'm ';
-                timeDisplay += seconds + 's';
-
-                const score = Math.round((correctAnswers / questions.length) * 100);
-                
-                statusBox.innerHTML = `
-                    <div style="margin-top: 12px; line-height: 1.6;">
-                        <div style="color: #ff3b00; font-weight: 700; font-size: 1.2em;">Quiz ${endedEarly ? 'Ended' : 'Completed'}!</div>
-                        <div style="margin-top: 8px;">Score: ${correctAnswers}/${questions.length} (${score}%)</div>
-                        <div>Total Points: <span style="color: #ff3b00; font-weight: 600;">${displayPoints}</span></div>
-                        <div>Time Taken: ${timeDisplay}</div>
-                        <div style="margin-top: 12px; font-size: 0.9em; opacity: 0.8;">Quiz saved to database ✓</div>
-                    </div>
-                `;
-
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    location.href = 'index.html';
-                }, 3000);
-            } catch (error) {
-                alert('Error saving quiz result: ' + error.message);
-                statusBox.textContent = 'Error saving quiz. Please refresh and try again.';
-            }
-        }
-
-        function disableQuizInteraction() {
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => {
-                option.style.pointerEvents = 'none';
-                option.style.opacity = '0.6';
-            });
-        }
-    </script>
-
-    <!-- Firebase Configuration -->
-    <script src="../js/firebaseConfig.js"></script>
 </body>
 </html>

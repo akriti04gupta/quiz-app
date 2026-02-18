@@ -37,7 +37,8 @@ function renderUsers(users) {
     
     const timeString = formatTime(user.timeTaken || 0);
     const totalPoints = (user.score || 0) * 10;
-    const level = Math.max(1, Math.ceil((user.score || 0) / 2));
+    const derivedLevel = Math.max(1, Math.ceil((user.questionsAnswered || 0) / 3));
+    const level = Math.min(4, user.levelReached || derivedLevel);
     const dateStr = escapeHtml(user.date || 'N/A');
     const playerName = escapeHtml(String(user.playerName || 'Anonymous').substring(0, 100));
     
@@ -75,7 +76,8 @@ function applyUserFilters() {
 
   if (Array.isArray(appState.userFilters.levels) && appState.userFilters.levels.length > 0) {
     filtered = filtered.filter(u => {
-      const level = Math.max(1, Math.ceil((u.score || 0) / 2));
+      const derivedLevel = Math.max(1, Math.ceil((u.questionsAnswered || 0) / 3));
+      const level = Math.min(4, u.levelReached || derivedLevel);
       return appState.userFilters.levels.includes(level);
     });
   }
@@ -110,7 +112,8 @@ function downloadCSV() {
     
     const playerName = String(user.playerName || 'Anonymous').replace(/"/g, '""');
     const totalPoints = (parseInt(user.score) || 0) * 10;
-    const level = Math.max(1, Math.ceil((parseInt(user.score) || 0) / 2));
+    const derivedLevel = Math.max(1, Math.ceil((parseInt(user.questionsAnswered) || 0) / 3));
+    const level = Math.min(4, user.levelReached || derivedLevel);
     const dateStr = user.date || 'N/A';
     const timeTaken = parseInt(user.timeTaken) || 0;
     const questionsAnswered = parseInt(user.questionsAnswered) || 0;

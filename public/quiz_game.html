@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Game - KRAK THE CODE!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Inter',sans-serif;
+}
+
+/* CANVAS */
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+
+.canvas{
+    position:absolute;
+    width:387px;
+    height:688px;
+    background:url("/assets/fourth/background.png") no-repeat center;
+    background-size:cover;
+}
+
+/* VECTOR TOP LEFT — SAME AS OTHER PAGES */
+.vector-bg{
+    position:absolute;
+    top:18px;
+    left:18px;
+    width:36px;
+}
+
+.vector-icon{
+    position:absolute;
+    top:26px;
+    left:27px;
+    width:20px;
+}
+
+/* TITLE IMAGE */
+.title-image{
+    position:absolute;
+    top:110px;
+    left:30px;
+    width:340px;
+}
+
+/* LEVEL CARDS */
+.card-a{
+    position:absolute;
+    top:230px;
+    left:30px;
+    width:280px;
+}
+
+.card-b{
+    position:absolute;
+    top:310px;   /* 230 + 90 */
+    left:30px;
+    width:280px; /* same as a */
+}
+
+.card-c{
+    position:absolute;
+    top:390px;   /* 320 + 90 */
+    left:30px;
+    width:280px; /* same as a */
+}
+
+.card-d{
+    position:absolute;
+    top:470px;   /* 410 + 90 */
+    left:30px;
+    width:280px; /* same as a */
+}
+
+
+/* START BUTTON */
+.start-btn{
+    position:absolute;
+    bottom:75px;
+    left:43%;
+    transform:translateX(-50%);
+    width:220px;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="canvas-wrapper" id="wrapper">
+    <div class="canvas"></div>
+
+    <!-- VECTOR BACK -->
+    <div onclick="location.href='howtoplay.html'">
+        <img src="/assets/fourth/vector_background.png" class="vector-bg">
+        <img src="/assets/fourth/vector.png" class="vector-icon">
+    </div>
+
+    <!-- TITLE -->
+    <img src="/assets/fourth/far.png" class="title-image">
+
+    <!-- LEVEL CARDS -->
+    <img src="/assets/fourth/a.png" class="card-a">
+    <img src="/assets/fourth/b.png" class="card-b">
+    <img src="/assets/fourth/c.png" class="card-c">
+    <img src="/assets/fourth/d.png" class="card-d">
+
+    <!-- START BUTTON -->
+    <img src="/assets/fourth/start.png" class="start-btn" onclick="location.href='actual_quiz.html'">
+
+</div>
+
+<script>
+function scaleCanvas(){
+    const wrapper=document.getElementById("wrapper");
+    const scale=Math.min(window.innerWidth/387,window.innerHeight/688);
+    wrapper.style.transform=`scale(${scale})`;
+}
+scaleCanvas();
+window.addEventListener("resize",scaleCanvas);
+</script>
+
+</body>
+</html>
