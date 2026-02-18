@@ -202,7 +202,7 @@ html,body{
     <!-- VECTOR DECORATION -->
     <div class="back-wrapper" onclick="location.href='index.html'">
     <img src="/assets/second/vector_background.png" class="vector-bg">
-    <img src="/assets/second/vector.png" class="vector-icon">
+    <img src="/assets/second/Vector.png" class="vector-icon">
 </div>
 
 
@@ -279,7 +279,7 @@ document.getElementById("playerName").addEventListener("keypress", function(e){
 
 async function loadLeaderboard(){
     try{
-        const res=await fetch('http://localhost:3000/api/quiz/leaderboard');
+        const res=await fetch('/api/quiz/leaderboard');
         const data=await res.json();
 
         if(data.today?.[0]){

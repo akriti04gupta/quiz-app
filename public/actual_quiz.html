@@ -631,7 +631,7 @@ async function initQuiz(){
     }
 
     try{
-        const res = await fetch('http://localhost:3000/api/quiz/start');
+        const res = await fetch('/api/quiz/start');
         const data = await res.json();
 
         if(!res.ok){
@@ -744,7 +744,7 @@ async function markQuestionUsed(question){
     seenQuestionIds.add(question.id);
 
     try{
-        await fetch('http://localhost:3000/api/quiz/mark-used', {
+        await fetch('/api/quiz/mark-used', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -897,7 +897,7 @@ async function submitAttempt(){
     const levelReached = Math.min(TOTAL_LEVELS, Math.max(1, currentLevel));
 
     try{
-        await fetch('http://localhost:3000/api/quiz/submit', {
+        await fetch('/api/quiz/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

@@ -47,11 +47,15 @@ app.get('/quiz', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/quiz.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n========================================`);
-  console.log(`   QUIZ APP SERVER RUNNING`);
-  console.log(`========================================`);
-  console.log(`   http://localhost:${PORT}`);
-  console.log(`========================================\n`);
-});
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`\n========================================`);
+    console.log(`   QUIZ APP SERVER RUNNING`);
+    console.log(`========================================`);
+    console.log(`   http://localhost:${PORT}`);
+    console.log(`========================================\n`);
+  });
+}
+
+module.exports = app;
   
