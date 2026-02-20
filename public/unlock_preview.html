@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlock Screen Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Inter',sans-serif;
+}
+:root{
+    --milestone-check-icon:url("https://www.figma.com/api/mcp/asset/be9cbb99-eb3f-4ed2-b188-cddb38a31032");
+}
+
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+
+.level-unlock-screen{
+    position:absolute;
+    inset:0;
+    --unlock-scale: 0.358333;
+    background:#000;
+    overflow:hidden;
+}
+
+.unlock-bg-gradient{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:1;
+    pointer-events:none;
+    z-index:1;
+}
+
+.unlock-back-link{
+    position:absolute;
+    left:calc(64.4px * var(--unlock-scale));
+    top:calc(136px * var(--unlock-scale));
+    width:calc(86.13px * var(--unlock-scale));
+    height:calc(86.13px * var(--unlock-scale));
+    z-index:5;
+    display:block;
+}
+
+.unlock-back-circle{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.unlock-back-arrow{
+    position:absolute;
+    width:calc(38.184px * var(--unlock-scale));
+    height:calc(35.247px * var(--unlock-scale));
+    left:calc(24px * var(--unlock-scale));
+    top:calc(25px * var(--unlock-scale));
+}
+
+.unlock-intro{
+    position:absolute;
+    left:calc(90px * var(--unlock-scale));
+    top:calc(290px * var(--unlock-scale));
+    width:calc(855px * var(--unlock-scale));
+    font-size:calc(57.609px * var(--unlock-scale));
+    font-weight:800;
+    line-height:calc(63.37px * var(--unlock-scale));
+    letter-spacing:calc(-1.1522px * var(--unlock-scale));
+    color:#fff;
+    z-index:5;
+}
+
+.unlock-prize{
+    position:absolute;
+    top:calc(398px * var(--unlock-scale));
+    left:calc(82px * var(--unlock-scale));
+    width:calc(425.321px * var(--unlock-scale));
+    height:calc(425.321px * var(--unlock-scale));
+    object-fit:contain;
+    z-index:5;
+}
+
+.unlock-title{
+    position:absolute;
+    left:calc(102px * var(--unlock-scale));
+    top:calc(950px * var(--unlock-scale));
+    width:calc(856.792px * var(--unlock-scale));
+    font-size:calc(74.418px * var(--unlock-scale));
+    font-weight:800;
+    line-height:calc(77.145px * var(--unlock-scale));
+    letter-spacing:calc(-1.4026px * var(--unlock-scale));
+    color:#fff;
+    z-index:5;
+}
+
+.unlock-title span{color:#ff1703;}
+
+.unlock-subtitle{
+    position:absolute;
+    left:calc(102px * var(--unlock-scale));
+    top:calc(1055px * var(--unlock-scale));
+    width:calc(758.294px * var(--unlock-scale));
+    font-size:calc(48.947px * var(--unlock-scale));
+    font-weight:500;
+    line-height:calc(62.023px * var(--unlock-scale));
+    letter-spacing:calc(-0.9789px * var(--unlock-scale));
+    color:#fff;
+    z-index:5;
+}
+
+.unlock-subtitle .unlock-highlight{
+    color:#ff1703;
+    white-space:nowrap;
+}
+
+.unlock-continue-btn,
+.unlock-home-btn{
+    position:absolute;
+    left:calc(101px * var(--unlock-scale));
+    width:calc(537.063px * var(--unlock-scale));
+    height:calc(94.602px * var(--unlock-scale));
+    border:none;
+    border-radius:calc(52.014px * var(--unlock-scale));
+    font-size:calc(35.321px * var(--unlock-scale));
+    font-weight:600;
+    box-shadow:0 0 calc(4.296px * var(--unlock-scale)) rgba(0,0,0,0.25);
+    z-index:5;
+}
+
+.unlock-continue-btn{
+    top:calc(1320px * var(--unlock-scale));
+    background:#fff;
+    color:#0d0d0d;
+}
+
+.unlock-home-btn{
+    top:calc(1448px * var(--unlock-scale));
+    background:#ff1703;
+    color:#fff;
+}
+
+.unlock-progress{
+    position:absolute;
+    top:calc(1720.83px * var(--unlock-scale));
+    left:calc(247.5px * var(--unlock-scale));
+    width:calc(585px * var(--unlock-scale));
+    z-index:5;
+}
+
+.unlock-progress-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+}
+
+.unlock-progress-container::before{
+    content:'';
+    position:absolute;
+    top:calc(26.839px * var(--unlock-scale));
+    left:calc(-25.973px * var(--unlock-scale));
+    width:calc(636.946px * var(--unlock-scale));
+    height:calc(3.463px * var(--unlock-scale));
+    background:#333;
+    border-radius:calc(1.732px * var(--unlock-scale));
+}
+
+.unlock-step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:calc(9.524px * var(--unlock-scale));
+    z-index:2;
+}
+
+.unlock-step .status{
+    width:calc(51.946px * var(--unlock-scale));
+    height:calc(51.946px * var(--unlock-scale));
+    border-radius:50%;
+    background:#151515;
+    border:calc(6.926px * var(--unlock-scale)) solid #000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.unlock-step .status::after{
+    content:'';
+    width:calc(13.852px * var(--unlock-scale));
+    height:calc(13.852px * var(--unlock-scale));
+    border-radius:50%;
+    background:#bdbdbd;
+}
+
+.unlock-step span{
+    font-size:calc(19.047px * var(--unlock-scale));
+    line-height:calc(22.856px * var(--unlock-scale));
+    font-weight:400;
+    color:#bcbcbc;
+    white-space:nowrap;
+}
+
+.unlock-step.completed .status{
+    background:#ff1703;
+    box-shadow:0 0 calc(25.973px * var(--unlock-scale)) rgba(255,255,255,0.4);
+}
+
+.unlock-step.completed .status::after{
+    width:calc(24px * var(--unlock-scale));
+    height:calc(24px * var(--unlock-scale));
+    background-image:var(--milestone-check-icon);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-color:transparent;
+}
+
+.unlock-step.completed span{
+    color:#fff;
+    font-weight:700;
+}
+</style>
+</head>
+<body>
+<div class="canvas-wrapper" id="wrapper">
+    <div class="level-unlock-screen">
+        <img class="unlock-bg-gradient" src="https://www.figma.com/api/mcp/asset/9c997bf9-5202-462c-8e50-9bc0390f43dc" alt="">
+
+        <a href="#" class="unlock-back-link" aria-label="Back">
+            <img src="/assets/fifth/vector_background.png" class="unlock-back-circle" alt="">
+            <img src="/assets/fifth/vector.png" class="unlock-back-arrow" alt="">
+        </a>
+
+        <div class="unlock-intro">You won a small prize..</div>
+        <img class="unlock-prize" src="https://www.figma.com/api/mcp/asset/2881a9bd-b32c-4140-ac2a-99710e75bffa" alt="Unlocked Prize">
+
+        <div class="unlock-title">LEVEL 2 <span>UNLOCKED!</span></div>
+        <div class="unlock-subtitle">Answer 3 Medium questions and get a chance to win <span class="unlock-highlight">DRIVER CARD!</span></div>
+
+        <button class="unlock-continue-btn">Continue Playing</button>
+        <button class="unlock-home-btn">Home</button>
+
+        <div class="unlock-progress">
+            <div class="unlock-progress-container">
+                <div class="unlock-step completed">
+                    <div class="status"></div>
+                    <span>Small Prize</span>
+                </div>
+                <div class="unlock-step">
+                    <div class="status"></div>
+                    <span>Driver Card</span>
+                </div>
+                <div class="unlock-step">
+                    <div class="status"></div>
+                    <span>Merch</span>
+                </div>
+                <div class="unlock-step">
+                    <div class="status"></div>
+                    <span>$100 Crypto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function scaleCanvas(){
+    const wrapper=document.getElementById('wrapper');
+    const scale=Math.min(window.innerWidth/387,window.innerHeight/688);
+    wrapper.style.transform=`scale(${scale})`;
+}
+scaleCanvas();
+window.addEventListener('resize',scaleCanvas);
+</script>
+</body>
+</html>

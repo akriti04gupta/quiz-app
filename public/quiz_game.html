@@ -37,19 +37,30 @@ html,body{
     background-size:cover;
 }
 
-/* VECTOR TOP LEFT — SAME AS OTHER PAGES */
-.vector-bg{
+/* BACK BUTTON */
+.page-back-link{
     position:absolute;
-    top:18px;
-    left:18px;
-    width:36px;
+    left:23.1px;
+    top:57.6px;
+    width:30.9px;
+    height:30.9px;
+    z-index:20;
+    display:block;
 }
 
-.vector-icon{
+.page-back-circle{
     position:absolute;
-    top:26px;
-    left:27px;
-    width:20px;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.page-back-arrow{
+    position:absolute;
+    width:13.7px;
+    height:12.6px;
+    left:8.6px;
+    top:9px;
 }
 
 /* TITLE IMAGE */
@@ -108,11 +119,11 @@ html,body{
 <div class="canvas-wrapper" id="wrapper">
     <div class="canvas"></div>
 
-    <!-- VECTOR BACK -->
-    <div onclick="location.href='howtoplay.html'">
-        <img src="/assets/fourth/vector_background.png" class="vector-bg">
-        <img src="/assets/fourth/vector.png" class="vector-icon">
-    </div>
+    <!-- BACK BUTTON -->
+    <a href="howtoplay.html" class="page-back-link" aria-label="Back">
+        <img src="/assets/fourth/vector_background.png" class="page-back-circle" alt="">
+        <img src="/assets/fourth/vector.png" class="page-back-arrow" alt="">
+    </a>
 
     <!-- TITLE -->
     <img src="/assets/fourth/far.png" class="title-image">

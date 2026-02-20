@@ -67,27 +67,51 @@ router.get('/getall', async (req, res) => {
 
 router.post('/submit', async (req, res) => {
   try {
-    const { answers, totalQuestions, playerName, timeTaken, score, questionsAnswered, levelReached } = req.body;
-    
-    console.log('Quiz Submit - Player:', playerName, 'Answers:', answers.length, 'Total:', totalQuestions, 'Time:', timeTaken, 'Score:', score);
-    
-    let calculatedScore = score || answers.filter(a => a.isCorrect).length;
+    const payload = req.body || {};
+    const answers = Array.isArray(payload.answers) ? payload.answers : [];
+    const totalQuestionsRaw = Number(payload.totalQuestions);
+    const playerNameRaw = typeof payload.playerName === 'string' ? payload.playerName : '';
+    const timeTakenRaw = Number(payload.timeTaken);
+    const scoreRaw = Number(payload.score);
+    const questionsAnsweredRaw = Number(payload.questionsAnswered);
+    const levelReachedRaw = Number(payload.levelReached);
+
+    const totalQuestions = Number.isFinite(totalQuestionsRaw) && totalQuestionsRaw > 0
+      ? Math.floor(totalQuestionsRaw)
+      : 12;
+    const playerName = playerNameRaw.trim().slice(0, 100) || 'Anonymous';
+    const timeTaken = Number.isFinite(timeTakenRaw) && timeTakenRaw >= 0
+      ? Math.floor(timeTakenRaw)
+      : 0;
+
+    const computedFromAnswers = answers.filter(a => a && a.isCorrect === true).length;
+    const calculatedScore = Number.isFinite(scoreRaw) && scoreRaw >= 0
+      ? Math.floor(scoreRaw)
+      : computedFromAnswers;
     const points = calculatedScore * 10;
-    const answeredCount = Number.isInteger(questionsAnswered) ? questionsAnswered : answers.length;
-    const reachedLevel = Number.isInteger(levelReached) ? levelReached : null;
+
+    const answeredCount = Number.isFinite(questionsAnsweredRaw) && questionsAnsweredRaw >= 0
+      ? Math.floor(questionsAnsweredRaw)
+      : answers.length;
+
+    const reachedLevel = Number.isFinite(levelReachedRaw) && levelReachedRaw >= 1
+      ? Math.min(4, Math.floor(levelReachedRaw))
+      : null;
+
+    console.log('Quiz Submit - Player:', playerName, 'Answers:', answers.length, 'Total:', totalQuestions, 'Time:', timeTaken, 'Score:', calculatedScore);
     
     const safeAnswered = answeredCount > 0 ? answeredCount : 1;
     const attemptData = {
       timestamp: Date.now(),
       date: new Date().toISOString(),
-      playerName: playerName || 'Anonymous',
+      playerName,
       score: calculatedScore,
-      totalQuestions: totalQuestions,
+      totalQuestions,
       questionsAnswered: answeredCount,
       levelReached: reachedLevel,
       percentage: Math.round((calculatedScore / safeAnswered) * 100),
       points: points,
-      timeTaken: timeTaken || 0,
+      timeTaken,
       answers: answers
     };
     
@@ -101,10 +125,10 @@ router.post('/submit', async (req, res) => {
     res.json({ 
       success: true, 
       score: calculatedScore,
-      totalQuestions: totalQuestions,
+      totalQuestions,
       percentage: attemptData.percentage,
       points: points,
-      timeTaken: timeTaken
+      timeTaken
     });
   } catch (error) {
     console.error('Error submitting quiz:', error);
@@ -221,7 +245,8 @@ router.get('/leaderboard', async (req, res) => {
     
     const leaderboard = {
       today: [],
-      allTime: []
+      allTime: [],
+      top10: []
     };
     
     // Add top score for today (with that player's time)
@@ -245,6 +270,15 @@ router.get('/leaderboard', async (req, res) => {
         timestamp: allTimeSortedByScore[0].timestamp || Date.now()
       });
     }
+
+    leaderboard.top10 = allTimeSortedByScore.slice(0, 10).map((attempt, index) => ({
+      rank: index + 1,
+      playerName: attempt.playerName || 'Anonymous',
+      score: attempt.score || 0,
+      points: attempt.points || (attempt.score || 0) * 10,
+      timeTaken: attempt.timeTaken || 0,
+      timestamp: attempt.timestamp || Date.now()
+    }));
     
     res.json(leaderboard);
   } catch (error) {

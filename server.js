@@ -6,6 +6,7 @@ const path = require('path');
 const quizRoutes = require('./routes/quizRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ app.use('/index_page', express.static(path.join(__dirname, 'index_page')));
 app.use('/api/quiz', quizRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api', dashboardRoutes);
+app.use('/api/auth', authRoutes);
 
 // Serve index.html for client-side routing
 app.get('/', (req, res) => {

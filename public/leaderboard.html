@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard - KRAK THE CODE!</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Inter',sans-serif;
+}
+
+.canvas-wrapper{
+    position:relative;
+    width:387px;
+    height:688px;
+    transform-origin:center center;
+}
+
+.canvas{
+    position:absolute;
+    inset:0;
+  background:url("/assets/fifth/background.png") no-repeat center;
+  background-size:cover;
+    overflow:hidden;
+}
+
+.coin-cluster{
+    position:absolute;
+  right:-32px;
+  top:-19px;
+  width:126px;
+  height:126px;
+    transform:rotate(-52deg);
+    object-fit:contain;
+    z-index:3;
+    pointer-events:none;
+}
+
+.page-back-link{
+    position:absolute;
+  left:23.1px;
+  top:57.6px;
+  width:30.9px;
+  height:30.9px;
+    z-index:10;
+    display:block;
+}
+
+.page-back-circle{
+  position:absolute;
+  inset:0;
+    width:100%;
+    height:100%;
+}
+
+.page-back-arrow{
+  position:absolute;
+  width:13.7px;
+  height:12.6px;
+  left:8.6px;
+  top:9px;
+}
+
+.logo{
+    position:absolute;
+  top:45px;
+    left:50%;
+    transform:translateX(-50%);
+  width:68px;
+    height:auto;
+    z-index:8;
+}
+
+.page-title{
+    position:absolute;
+  top:92px;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-weight:800;
+  font-size:20px;
+  line-height:20px;
+  letter-spacing:-0.25px;
+    z-index:8;
+}
+
+.podium{
+    position:absolute;
+  left:33px;
+  top:142px;
+  width:321px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:6px;
+  padding:6px 8px 10px;
+  background:radial-gradient(56% 72% at 50% 100%, rgba(34,0,0,1) 0%, rgba(34,0,0,0) 70%);
+    z-index:5;
+}
+
+.podium-item{
+  width:92px;
+    text-align:center;
+}
+
+.podium-item.first{
+  width:112px;
+}
+
+.avatar-wrap{
+    position:relative;
+  margin:0 auto 8px;
+  width:60px;
+  height:60px;
+    border-radius:50%;
+    border:2.1px solid #a19a9a;
+    overflow:hidden;
+    background:#ff2d2d;
+}
+
+.podium-item.first .avatar-wrap{
+  width:78px;
+  height:78px;
+    border:3px solid #ff2d2d;
+    box-shadow:0 0 20px rgba(255,0,0,0.4);
+}
+
+.avatar-wrap img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0.12;
+}
+
+.avatar-letter{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#ffcccc;
+    font-weight:500;
+    font-size:28px;
+}
+
+.podium-item.first .avatar-letter{
+  font-size:38px;
+}
+
+.rank-chip{
+    position:absolute;
+    left:50%;
+    bottom:-9px;
+    transform:translateX(-50%);
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    border:1.1px solid rgba(255,255,255,0.18);
+    background:#0b0b0b;
+    color:#fff;
+    font-weight:800;
+    font-size:11.5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.podium-item.first .rank-chip{
+  width:28px;
+  height:28px;
+    background:#ff2d2d;
+    border-color:#ff2d2d;
+    font-size:14px;
+}
+
+.podium-name{
+    color:#fff;
+    font-weight:600;
+  font-size:11px;
+    line-height:13px;
+    margin-bottom:2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.podium-item.first .podium-name{
+    color:#ff2d2d;
+  font-size:12px;
+  line-height:14px;
+}
+
+.podium-score,.podium-time{
+    color:#a19a9a;
+  font-size:10px;
+  line-height:12px;
+    font-weight:500;
+}
+
+.rank-list{
+    position:absolute;
+  left:28px;
+  right:28px;
+  top:258px;
+  bottom:88px;
+    overflow:hidden;
+    border-radius:24px 24px 0 0;
+    padding:4px 0 0;
+}
+
+.rank-row{
+    position:relative;
+    display:grid;
+  grid-template-columns:36px minmax(0,1fr) 88px 82px;
+    align-items:center;
+  column-gap:9px;
+  height:49px;
+    border-bottom:none;
+}
+
+.rank-row::after{
+    content:'';
+    position:absolute;
+    left:14px;
+    right:14px;
+    bottom:0;
+    height:1px;
+    background:rgba(0,0,0,0.24);
+}
+
+.rank-no{
+    color:#a19a9a;
+  font-size:11px;
+    font-weight:600;
+    text-align:center;
+}
+
+.rank-name{
+    color:#fff;
+  font-size:15px;
+    font-weight:600;
+  line-height:1.1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.rank-time{
+    color:#a19a9a;
+  font-size:11px;
+    font-weight:500;
+  line-height:1;
+    text-align:right;
+}
+
+.rank-points{
+    color:#fff;
+  font-size:16px;
+    font-weight:600;
+  line-height:1;
+    text-align:right;
+}
+
+.home-btn{
+    position:absolute;
+    left:50%;
+  bottom:22px;
+    transform:translateX(-50%);
+  width:236px;
+  height:50px;
+    border:none;
+  border-radius:26px;
+    background:#fff;
+    color:#ff3b00;
+  font-size:16px;
+    font-weight:600;
+  line-height:1;
+    box-shadow:0 0 1.85px rgba(0,0,0,0.25);
+    cursor:pointer;
+    z-index:12;
+}
+
+.home-btn:hover{filter:brightness(0.98);}
+
+</style>
+</head>
+<body>
+<div class="canvas-wrapper" id="wrapper">
+    <div class="canvas">
+        <img class="coin-cluster" src="https://www.figma.com/api/mcp/asset/d859931c-3bfb-4430-b916-a21895bfb0a5" alt="">
+
+        <a href="index.html" class="page-back-link" aria-label="Back">
+          <img src="/assets/fifth/vector_background.png" class="page-back-circle" alt="">
+          <img src="/assets/fifth/vector.png" class="page-back-arrow" alt="">
+        </a>
+
+        <img class="logo" src="https://www.figma.com/api/mcp/asset/83641db9-c0e6-4a2f-88ab-b761a2adfdea" alt="Krak">
+
+        <div class="page-title">Top 10 Participants</div>
+
+        <div class="podium" id="podium"></div>
+
+        <div class="rank-list" id="rankList"></div>
+
+        <button class="home-btn" onclick="location.href='index.html'">Home</button>
+    </div>
+</div>
+
+<script>
+const rankAssets = {
+  1: "https://www.figma.com/api/mcp/asset/aec66885-dc5f-4d67-b451-6ecf373f7f2a",
+  2: "https://www.figma.com/api/mcp/asset/914d27ff-cf22-4a3d-8fa9-84ca474d07e1",
+  3: "https://www.figma.com/api/mcp/asset/29fe9337-9198-4d65-8a4f-8772a8d74e95"
+};
+
+const fallback = [
+  { playerName:'CryptoQueen', points:12500, timeTaken:672 },
+  { playerName:'BlockMaster', points:11200, timeTaken:672 },
+  { playerName:'SatoshiFan', points:10850, timeTaken:672 },
+  { playerName:'Luna_Tic', points:9400, timeTaken:672 },
+  { playerName:'Rajiv_X', points:9100, timeTaken:785 },
+  { playerName:'JessieJ', points:8950, timeTaken:870 },
+  { playerName:'Hassan_K', points:8200, timeTaken:945 },
+  { playerName:'Mai_Lin', points:7800, timeTaken:980 },
+  { playerName:'OldHODLer', points:7550, timeTaken:1080 },
+  { playerName:'Zara_99', points:7200, timeTaken:1215 }
+];
+
+function initials(name){
+  const clean = (name || 'A').trim();
+  return clean.charAt(0).toUpperCase();
+}
+
+function fmtNum(value){
+  return Number(value || 0).toLocaleString('en-US');
+}
+
+function fmtTime(total){
+  const s = Math.max(0, parseInt(total || 0, 10));
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}m ${sec.toString().padStart(2,'0')}s`;
+}
+
+function normalizeRows(rows){
+  const normalized = (rows || []).map(item => ({
+    playerName: item.playerName || 'Anonymous',
+    points: item.points ?? ((item.score || 0) * 10),
+    timeTaken: item.timeTaken || 0
+  }));
+  if(normalized.length >= 10) return normalized.slice(0,10);
+  return [...normalized, ...fallback.slice(normalized.length, 10)];
+}
+
+function render(rows){
+  const list = normalizeRows(rows);
+  const podiumOrder = [list[1], list[0], list[2]];
+
+  const podium = document.getElementById('podium');
+  podium.innerHTML = podiumOrder.map((item, idx) => {
+    const rank = idx === 0 ? 2 : idx === 1 ? 1 : 3;
+    const cls = rank === 1 ? 'podium-item first' : 'podium-item';
+    return `
+      <div class="${cls}">
+        <div class="avatar-wrap">
+          <img src="${rankAssets[rank]}" alt="">
+          <div class="avatar-letter">${initials(item.playerName)}</div>
+          <div class="rank-chip">${rank}</div>
+        </div>
+        <div class="podium-name">${item.playerName}</div>
+        <div class="podium-score">${fmtNum(item.points)}</div>
+        <div class="podium-time">${fmtTime(item.timeTaken)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const rankList = document.getElementById('rankList');
+  rankList.innerHTML = list.slice(3,10).map((item, idx) => {
+    const rank = idx + 4;
+    return `
+      <div class="rank-row">
+        <div class="rank-no">${rank}</div>
+        <div class="rank-name">${item.playerName}</div>
+        <div class="rank-time">${fmtTime(item.timeTaken)}</div>
+        <div class="rank-points">${fmtNum(item.points)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function loadLeaderboard(){
+  try{
+    const res = await fetch('/api/quiz/leaderboard');
+    const data = await res.json();
+    if(!res.ok) throw new Error('Leaderboard fetch failed');
+    render(Array.isArray(data.top10) ? data.top10 : []);
+  }catch(err){
+    render([]);
+  }
+}
+
+function scaleCanvas(){
+  const wrapper = document.getElementById('wrapper');
+  const scale = Math.min(window.innerWidth / 387, window.innerHeight / 688) * 0.88;
+  wrapper.style.transform = `scale(${scale})`;
+}
+
+scaleCanvas();
+window.addEventListener('resize', scaleCanvas);
+loadLeaderboard();
+</script>
+</body>
+</html>

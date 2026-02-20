@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz - KRAK THE CODE!</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -18,6 +18,10 @@ html,body{
     justify-content:center;
     align-items:center;
     font-family:'Inter',sans-serif;
+}
+:root{
+    --milestone-check-icon:url("https://www.figma.com/api/mcp/asset/be9cbb99-eb3f-4ed2-b188-cddb38a31032");
+    --result-fail-icon:url("https://www.figma.com/api/mcp/asset/8bc499c4-7d45-45e9-a140-4156dce7fbd8");
 }
 
 /* CANVAS */
@@ -35,78 +39,226 @@ html,body{
     background-size:cover;
 }
 
-/* BACK BUTTON */
-.vector-bg{
-    position:absolute;
-    top:18px;
-    left:18px;
-    width:32px;
-    z-index:100;
-}
-.vector-icon{
-    position:absolute;
-    top:25px;
-    left:26px;
-    width:18px;
-    z-index:101;
-}
-
-/* COUNTDOWN SCREEN (UNCHANGED) */
+/* COUNTDOWN SCREEN */
 .countdown-screen{
     position:absolute;
+    inset:0;
+    --countdown-scale: 0.358333;
+    --countdown-ui: var(--countdown-scale);
+    --countdown-back-left: calc(64.4px * var(--countdown-scale));
+    --countdown-back-top: calc(160.65px * var(--countdown-scale));
+    --countdown-back-size: calc(86.13px * var(--countdown-scale));
+    --countdown-arrow-width: calc(38.184px * var(--countdown-scale));
+    --countdown-arrow-height: calc(35.247px * var(--countdown-scale));
+    --countdown-arrow-left: calc(24px * var(--countdown-scale));
+    --countdown-arrow-top: calc(25px * var(--countdown-scale));
+    --countdown-row-top: calc(523px * var(--countdown-scale));
+    --countdown-label-gap: calc(34px * var(--countdown-scale));
+    --countdown-digit-width: calc(34.97px * var(--countdown-scale));
+    --countdown-digit-gap: calc(34px * var(--countdown-scale));
+    --countdown-coins-top: calc(741px * var(--countdown-scale));
+    --countdown-coins-width: calc(708.09px * var(--countdown-scale));
+    --countdown-level-top: calc(1160px * var(--countdown-scale));
+    --countdown-subtitle-gap: calc(28px * var(--countdown-scale));
+    --countdown-progress-left: calc(247.5px * var(--countdown-scale));
+    --countdown-progress-top: calc(1720.83px * var(--countdown-scale));
+    --countdown-progress-width: calc(585px * var(--countdown-scale));
+}
+.countdown-back-link{
+    position:absolute;
+    left:var(--countdown-back-left);
+    top:var(--countdown-back-top);
+    width:var(--countdown-back-size);
+    height:var(--countdown-back-size);
+    z-index:220;
+    display:block;
+}
+.countdown-back-circle{
+    position:absolute;
+    inset:0;
     width:100%;
     height:100%;
 }
+.countdown-back-arrow{
+    position:absolute;
+    width:var(--countdown-arrow-width);
+    height:var(--countdown-arrow-height);
+    left:var(--countdown-arrow-left);
+    top:var(--countdown-arrow-top);
+}
 .countdown-text{
     position:absolute;
-    top:205px;
+    top:var(--countdown-row-top);
     left:50%;
     transform:translateX(-50%);
-    font-size:20px;
+    width:max-content;
+    display:inline-flex;
+    align-items:center;
+    gap:var(--countdown-label-gap);
+}
+.countdown-label{
+    width:auto;
+    font-size:calc(56.356px * var(--countdown-ui));
     font-weight:800;
+    line-height:calc(61.992px * var(--countdown-ui));
+    letter-spacing:calc(-1.1271px * var(--countdown-ui));
     color:#fff;
+    white-space:nowrap;
+}
+.countdown-nums{
+    width:auto;
     display:flex;
-    gap:12px;
+    align-items:center;
+    gap:var(--countdown-digit-gap);
 }
 .countdown-num{
-    font-size:28px;
-    color:#666;
+    min-width:var(--countdown-digit-width);
+    width:auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:calc(56.356px * var(--countdown-ui));
+    font-weight:800;
+    line-height:calc(61.992px * var(--countdown-ui));
+    letter-spacing:calc(-1.1271px * var(--countdown-ui));
+    color:#fff;
+    opacity:0.3;
 }
 .countdown-num.active{
     color:#ff3b00;
+    opacity:1;
 }
 .coins-img{
     position:absolute;
-    top:260px;
+    top:var(--countdown-coins-top);
     left:50%;
     transform:translateX(-50%);
-    width:255px;
+    width:var(--countdown-coins-width);
 }
 .level-section{
     position:absolute;
-    top:415px;
+    top:var(--countdown-level-top);
     width:100%;
     text-align:center;
 }
 .level-title{
-    font-size:34px;
+    font-size:calc(78.029px * var(--countdown-ui));
     font-weight:800;
+    line-height:calc(85.831px * var(--countdown-ui));
+    letter-spacing:calc(-1.5606px * var(--countdown-ui));
     color:#fff;
 }
-.level-title span{color:#ff3b00;}
+.level-title span{color:#ff1703;}
 .level-subtitle{
-    font-size:13px;
-    font-weight:600;
+    margin-top:var(--countdown-subtitle-gap);
+    font-size:calc(40.885px * var(--countdown-ui));
+    font-weight:500;
+    line-height:calc(32.708px * var(--countdown-ui));
     color:#fff;
 }
 .progress-section{
     position:absolute;
-    bottom:55px;
-    left:50%;
-    transform:translateX(-50%);
-    width:235px;
+    left:var(--countdown-progress-left);
+    top:var(--countdown-progress-top);
+    width:var(--countdown-progress-width);
 }
-.container-img{width:100%;}
+.countdown-milestones{
+    position:relative;
+    width:100%;
+}
+
+.countdown-milestones-line{
+    position:absolute;
+    top:calc(26.839px * var(--countdown-scale));
+    left:calc(-25.973px * var(--countdown-scale));
+    width:calc(636.946px * var(--countdown-scale));
+    height:calc(3.463px * var(--countdown-scale));
+    background:#555;
+    border-radius:calc(1.732px * var(--countdown-scale));
+}
+
+.countdown-milestones-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+}
+
+.countdown-milestone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:calc(9.524px * var(--countdown-scale));
+}
+
+.countdown-milestone .outer{
+    width:calc(51.946px * var(--countdown-scale));
+    height:calc(51.946px * var(--countdown-scale));
+    border-radius:50%;
+    background:#151515;
+    border:calc(6.926px * var(--countdown-scale)) solid #000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+    position:relative;
+}
+
+.countdown-milestone .inner{
+    width:calc(13.852px * var(--countdown-scale));
+    height:calc(13.852px * var(--countdown-scale));
+    border-radius:50%;
+    background:#555;
+}
+
+.countdown-milestone span{
+    font-size:calc(19.047px * var(--countdown-scale));
+    line-height:calc(22.856px * var(--countdown-scale));
+    font-weight:400;
+    color:#bcbcbc;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.countdown-milestone.active .outer{
+    background:#fff;
+    box-shadow:0 0 calc(25.973px * var(--countdown-scale)) rgba(255,255,255,0.4);
+}
+
+.countdown-milestone.active .inner{
+    width:calc(17.315px * var(--countdown-scale));
+    height:calc(17.315px * var(--countdown-scale));
+    background:#000;
+}
+
+.countdown-milestone.active span{
+    color:#fff;
+    font-weight:700;
+}
+
+.countdown-milestone.completed .outer{
+    background:#ff1703;
+    box-shadow:0 0 calc(25.973px * var(--countdown-scale)) rgba(255,255,255,0.4);
+}
+
+.countdown-milestone.completed .inner{
+    display:none;
+}
+
+.countdown-milestone.completed .outer::after{
+    content:'';
+    width:calc(24px * var(--countdown-scale));
+    height:calc(24px * var(--countdown-scale));
+    background-image:var(--milestone-check-icon);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+}
+
+.countdown-milestone.completed span{
+    color:#fff;
+    font-weight:700;
+}
 
 /* ================= QUIZ SCREEN ================= */
 
@@ -117,157 +269,701 @@ html,body{
     display:none;
     background:url("/assets/quiz/background.png") no-repeat center;
     background-size:cover;
+    --canvas-scale: 0.358333;
+    --ui-scale: var(--canvas-scale);
+    --ui-space: var(--canvas-scale);
+    --level-left: calc(241.7px * var(--canvas-scale));
+    --level-top: calc(160.65px * var(--canvas-scale));
+    --coins-left: calc(822.1px * var(--canvas-scale));
+    --coins-top: calc(160.65px * var(--canvas-scale));
+    --progress-left: calc(82.399px * var(--canvas-scale));
+    --progress-top: calc(289.04px * var(--canvas-scale));
+    --progress-width: calc(927.901px * var(--canvas-scale));
+    --progress-height: calc(17.127px * var(--canvas-scale));
+    --question-label-left: calc(82.84px * var(--canvas-scale));
+    --question-label-top: calc(367.97px * var(--canvas-scale));
+    --timer-left: calc(830.41px * var(--canvas-scale));
+    --timer-top: calc(364.03px * var(--canvas-scale));
+    --question-left: calc(79.75px * var(--canvas-scale));
+    --question-top: calc(490.56px * var(--canvas-scale));
+    --question-width: calc(749.801px * var(--canvas-scale));
+    --options-left: calc(79.997px * var(--canvas-scale));
+    --options-top: calc(741px * var(--canvas-scale));
+    --options-width: calc(723.683px * var(--canvas-scale));
+    --options-gap: calc(62px * var(--canvas-scale));
+    --option-height: calc(121.926px * var(--canvas-scale));
+    --coins-graphic-left: calc(666.453px * var(--canvas-scale));
+    --coins-graphic-top: calc(243px * var(--canvas-scale));
+    --coins-graphic-size: calc(310.879px * var(--canvas-scale));
+    --milestones-left: calc(247.5px * var(--canvas-scale));
+    --milestones-top: calc(1720.83px * var(--canvas-scale));
+    --milestones-width: calc(585px * var(--canvas-scale));
+    --milestones-line-top: calc(26.839px * var(--canvas-scale));
+    --milestone-outer: calc(51.946px * var(--canvas-scale));
+    --milestone-inner: calc(13.852px * var(--canvas-scale));
+    --milestone-inner-active: calc(17.315px * var(--canvas-scale));
+    --milestone-border: calc(6.926px * var(--canvas-scale));
+    --milestone-gap: calc(9.524px * var(--canvas-scale));
+}
+
+.quiz-back-link{
+    position:absolute;
+    left:calc(64.4px * var(--canvas-scale));
+    top:calc(var(--level-top) - (19.2105px * var(--canvas-scale)));
+    width:calc(86.13px * var(--canvas-scale));
+    height:calc(86.13px * var(--canvas-scale));
+    z-index:220;
+    display:block;
+}
+
+.quiz-back-circle{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.quiz-back-arrow{
+    position:absolute;
+    width:calc(38.184px * var(--canvas-scale));
+    height:calc(35.247px * var(--canvas-scale));
+    left:calc(24px * var(--canvas-scale));
+    top:calc(25px * var(--canvas-scale));
+}
+
+/* BACKGROUND DECOR */
+.quiz-bg-group{
+    position:absolute;
+    width:calc(520px * var(--canvas-scale));
+    height:calc(520px * var(--canvas-scale));
+    right:calc(-180px * var(--canvas-scale));
+    top:calc(-40px * var(--canvas-scale));
+    opacity:0.35;
+    pointer-events:none;
+}
+
+.quiz-bg-accent{
+    position:absolute;
+    width:calc(430px * var(--canvas-scale));
+    height:calc(430px * var(--canvas-scale));
+    right:calc(-160px * var(--canvas-scale));
+    bottom:calc(-110px * var(--canvas-scale));
+    opacity:0.8;
+    pointer-events:none;
 }
 
 /* HEADER */
 .quiz-header{
     position:absolute;
-    top:85px;
-    left:25px;
-    right:25px;
-    display:flex;
-    justify-content:space-between;
+    inset:0;
+    z-index:110;
+    pointer-events:none;
 }
 .quiz-level{
-    font-size:18px;
+    position:absolute;
+    left:var(--level-left);
+    top:var(--level-top);
+    font-size:calc(43.372px * var(--ui-scale));
     font-weight:800;
+    letter-spacing:calc(-0.867px * var(--ui-scale));
+    line-height:calc(47.709px * var(--ui-scale));
     color:#fff;
 }
-.quiz-level span{color:#ff3b00;}
+.quiz-level span{color:#ff1703;}
 .quiz-score{
-    font-size:18px;
+    position:absolute;
+    left:var(--coins-left);
+    top:var(--coins-top);
+    font-size:calc(43.372px * var(--ui-scale));
     font-weight:800;
+    letter-spacing:calc(-0.867px * var(--ui-scale));
+    line-height:calc(47.709px * var(--ui-scale));
     color:#fff;
 }
 
 /* TOP PROGRESS */
 .progress-bar-top{
     position:absolute;
-    top:120px;
-    left:25px;
-    right:25px;
-    height:6px;
-    background:#ddd;
-    border-radius:3px;
+    top:var(--progress-top);
+    left:var(--progress-left);
+    width:var(--progress-width);
+    height:var(--progress-height);
+    background:#d9d9d9;
+    border-radius:calc(34px * var(--ui-scale));
     overflow:hidden;
 }
 .progress-fill-top{
     height:100%;
     width:33.33%;
     background:#ff3b00;
+    border-radius:calc(34px * var(--ui-scale));
     transition:width .4s ease;
 }
 
 /* QUESTION INFO */
 .question-info{
     position:absolute;
-    top:140px;
-    left:25px;
-    right:25px;
-    display:flex;
-    justify-content:space-between;
+    inset:0;
+    pointer-events:none;
 }
 .question-number{
-    font-size:14px;
-    font-weight:600;
-    color:#ff3b00;
+    position:absolute;
+    left:var(--question-label-left);
+    top:var(--question-label-top);
+    font-size:calc(38px * var(--ui-scale));
+    font-weight:500;
+    letter-spacing:calc(-0.867px * var(--ui-scale));
+    line-height:calc(47.709px * var(--ui-scale));
+    color:#ff1703;
 }
 .timer{
-    font-size:18px;
+    position:absolute;
+    left:var(--timer-left);
+    top:var(--timer-top);
+    font-size:calc(58.233px * var(--ui-scale));
     font-weight:800;
+    letter-spacing:calc(-1.165px * var(--ui-scale));
+    line-height:calc(64.057px * var(--ui-scale));
     color:#fff;
 }
 
 /* QUESTION */
 .question-content{
     position:absolute;
-    top:190px;
-    left:25px;
-    right:25px;
+    top:var(--question-top);
+    left:var(--question-left);
+    width:var(--question-width);
 }
 .question-text{
-    font-size:24px;
+    font-size:calc(65.968px * var(--ui-scale));
     font-weight:800;
+    letter-spacing:calc(-1.319px * var(--ui-scale));
+    line-height:calc(72.565px * var(--ui-scale));
     color:#fff;
-    margin-bottom:30px;
 }
 
 /* ANSWERS */
 .answers{
+    position:absolute;
+    top:var(--options-top);
+    left:var(--options-left);
+    width:var(--options-width);
     display:flex;
     flex-direction:column;
-    gap:18px;
+    gap:var(--options-gap);
 }
 .answer-option{
-    background:#444;
-    border-radius:10px;
-    padding:18px;
+    background:#1f1f1f;
+    border-radius:0px;
+    padding:calc(40.7px * var(--ui-space)) calc(34.6px * var(--ui-space));
+    min-height:var(--option-height);
     display:flex;
-    gap:14px;
+    gap:calc(34.6px * var(--ui-space));
     align-items:center;
     cursor:pointer;
     transition:.3s;
+    border:calc(3.46px * var(--ui-scale)) solid transparent;
+    box-sizing:border-box;
 }
 .answer-letter{
-    width:36px;
-    height:36px;
+    position:relative;
+    width:calc(51.946px * var(--ui-scale));
+    height:calc(51.946px * var(--ui-scale));
     border-radius:50%;
     background:#000;
-    color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:800;
+    flex-shrink:0;
 }
-.answer-text{
-    font-size:16px;
-    font-weight:600;
+.answer-letter span{
+    font-size:calc(28.303px * var(--ui-scale));
+    font-weight:500;
     color:#fff;
 }
-.answer-option.selected{background:#e10600;}
-.answer-option.correct{background:#34a853;}
+.answer-text{
+    font-size:calc(36.392px * var(--ui-scale));
+    font-weight:500;
+    line-height:calc(40.055px * var(--ui-scale));
+    color:#fff;
+}
+.answer-option.selected{
+    background:#fff;
+}
+.answer-option.selected .answer-text{
+    color:#000;
+}
+.answer-option.selected .answer-letter{
+    background:#fff;
+    border:2px solid #000;
+}
+.answer-option.selected .answer-letter span{color:#000;}
+.answer-option:hover:not(.correct):not(.wrong){
+    background:#fff;
+}
+.answer-option:hover:not(.correct):not(.wrong) .answer-text{
+    color:#000;
+}
+.answer-option.correct{background:#39a752;}
 .answer-option.wrong{background:#e10600;}
 
 /* COIN ANIMATION */
 .coin-animation{
     position:absolute;
-    top:60px;
-    right:15px;
-    width:120px;
+    inset:0;
     display:none;
+    pointer-events:none;
+    z-index:115;
+}
+.coins-graphic{
+    position:absolute;
+    top:var(--coins-graphic-top);
+    left:var(--coins-graphic-left);
+    width:var(--coins-graphic-size);
+    height:var(--coins-graphic-size);
+    transform:rotate(290deg);
+}
+
+.coins-graphic img{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+.plus-coins{
+    position:absolute;
+    top:calc(480px * var(--canvas-scale));
+    right:calc(120px * var(--canvas-scale));
+    font-size:calc(51.846px * var(--ui-scale));
+    font-weight:800;
+    line-height:calc(57.031px * var(--ui-scale));
+    letter-spacing:calc(-1.0369px * var(--ui-scale));
+    color:#1bff4f;
+    text-align:right;
 }
 .coin-animation.show{
     display:block;
-    animation:coinDrop 1s ease;
+    animation:coinDrop 0.7s ease;
 }
 @keyframes coinDrop{
-    from{transform:translateY(-80px);opacity:0;}
+    from{transform:translateY(calc(-30px * var(--canvas-scale)));opacity:0;}
     to{transform:translateY(0);opacity:1;}
+}
+
+/* QUIZ MILESTONES */
+.quiz-milestones{
+    position:absolute;
+    top:var(--milestones-top);
+    left:var(--milestones-left);
+    width:var(--milestones-width);
+}
+
+.quiz-milestones-line{
+    position:absolute;
+    top:var(--milestones-line-top);
+    left:calc(-25.973px * var(--canvas-scale));
+    width:calc(636.946px * var(--canvas-scale));
+    height:calc(3.463px * var(--canvas-scale));
+    background:#555;
+    border-radius:calc(1.732px * var(--canvas-scale));
+}
+
+.quiz-milestones-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+}
+
+.quiz-milestone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:var(--milestone-gap);
+}
+
+.quiz-milestone .outer{
+    width:var(--milestone-outer);
+    height:var(--milestone-outer);
+    border-radius:50%;
+    background:#151515;
+    border:var(--milestone-border) solid #000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+    position:relative;
+}
+
+.quiz-milestone .inner{
+    width:var(--milestone-inner);
+    height:var(--milestone-inner);
+    border-radius:50%;
+    background:#555;
+}
+
+.quiz-milestone span{
+    font-size:calc(19.047px * var(--canvas-scale));
+    line-height:calc(22.856px * var(--canvas-scale));
+    font-weight:400;
+    color:#bcbcbc;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.quiz-milestone.active .outer{
+    background:#fff;
+    box-shadow:0 0 calc(25.973px * var(--canvas-scale)) rgba(255,255,255,0.4);
+}
+
+.quiz-milestone.active .inner{
+    width:var(--milestone-inner-active);
+    height:var(--milestone-inner-active);
+    background:#000;
+}
+
+.quiz-milestone.active span{
+    color:#fff;
+    font-weight:700;
+}
+
+.quiz-milestone.completed .outer{
+    background:#ff1703;
+    box-shadow:0 0 calc(25.973px * var(--canvas-scale)) rgba(255,255,255,0.4);
+}
+
+.quiz-milestone.completed .inner{
+    display:none;
+}
+
+.quiz-milestone.completed .outer::after{
+    content:'';
+    width:calc(24px * var(--canvas-scale));
+    height:calc(24px * var(--canvas-scale));
+    background-image:var(--milestone-check-icon);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+}
+
+.quiz-milestone.completed span{
+    color:#fff;
+    font-weight:700;
+}
+
+/* ================= LEVEL UNLOCK SCREEN ================= */
+
+.level-unlock-screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    --unlock-scale: 0.358333;
+    background:#000;
+    overflow:hidden;
+    z-index:135;
+}
+
+.level-unlock-screen.show{
+    display:block;
+}
+
+.unlock-bg-gradient{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:1;
+    pointer-events:none;
+    z-index:1;
+}
+
+.unlock-back-link{
+    position:absolute;
+    left:calc(64.4px * var(--unlock-scale));
+    top:calc(136px * var(--unlock-scale));
+    width:calc(86.13px * var(--unlock-scale));
+    height:calc(86.13px * var(--unlock-scale));
+    z-index:5;
+    display:block;
+}
+
+.unlock-back-circle{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.unlock-back-arrow{
+    position:absolute;
+    width:calc(38.184px * var(--unlock-scale));
+    height:calc(35.247px * var(--unlock-scale));
+    left:calc(24px * var(--unlock-scale));
+    top:calc(25px * var(--unlock-scale));
+}
+
+.unlock-intro{
+    position:absolute;
+    left:calc(90px * var(--unlock-scale));
+    top:calc(290px * var(--unlock-scale));
+    width:calc(855px * var(--unlock-scale));
+    font-size:calc(57.609px * var(--unlock-scale));
+    font-weight:800;
+    line-height:calc(63.37px * var(--unlock-scale));
+    letter-spacing:calc(-1.1522px * var(--unlock-scale));
+    color:#fff;
+    z-index:5;
+}
+
+.unlock-prize{
+    position:absolute;
+    top:calc(398px * var(--unlock-scale));
+    left:calc(82px * var(--unlock-scale));
+    width:calc(425.321px * var(--unlock-scale));
+    height:calc(425.321px * var(--unlock-scale));
+    object-fit:contain;
+    z-index:5;
+}
+
+.unlock-title{
+    position:absolute;
+    left:calc(102px * var(--unlock-scale));
+    top:calc(950px * var(--unlock-scale));
+    width:calc(856.792px * var(--unlock-scale));
+    font-size:calc(74.418px * var(--unlock-scale));
+    font-weight:800;
+    line-height:calc(77.145px * var(--unlock-scale));
+    letter-spacing:calc(-1.4026px * var(--unlock-scale));
+    color:#fff;
+    z-index:5;
+}
+
+.unlock-title span{
+    color:#ff1703;
+}
+
+.unlock-subtitle{
+    position:absolute;
+    left:calc(102px * var(--unlock-scale));
+    top:calc(1055px * var(--unlock-scale));
+    width:calc(758.294px * var(--unlock-scale));
+    font-size:calc(48.947px * var(--unlock-scale));
+    font-weight:500;
+    line-height:calc(62.023px * var(--unlock-scale));
+    letter-spacing:calc(-0.9789px * var(--unlock-scale));
+    color:#fff;
+    z-index:5;
+}
+
+.unlock-subtitle span{
+    color:#ff1703;
+    white-space:nowrap;
+}
+
+.unlock-continue-btn,
+.unlock-home-btn{
+    position:absolute;
+    left:calc(101px * var(--unlock-scale));
+    width:calc(537.063px * var(--unlock-scale));
+    height:calc(94.602px * var(--unlock-scale));
+    border:none;
+    border-radius:calc(52.014px * var(--unlock-scale));
+    font-size:calc(35.321px * var(--unlock-scale));
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 0 calc(4.296px * var(--unlock-scale)) rgba(0,0,0,0.25);
+    z-index:5;
+}
+
+.unlock-continue-btn{
+    top:calc(1320px * var(--unlock-scale));
+    background:#fff;
+    color:#0d0d0d;
+}
+
+.unlock-home-btn{
+    top:calc(1448px * var(--unlock-scale));
+    background:#ff1703;
+    color:#fff;
+}
+
+.unlock-progress{
+    position:absolute;
+    top:calc(1720.83px * var(--unlock-scale));
+    left:calc(247.5px * var(--unlock-scale));
+    width:calc(585px * var(--unlock-scale));
+    z-index:5;
+}
+
+.unlock-progress-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+}
+
+.unlock-progress-container::before{
+    content:'';
+    position:absolute;
+    top:calc(26.839px * var(--unlock-scale));
+    left:calc(-25.973px * var(--unlock-scale));
+    width:calc(636.946px * var(--unlock-scale));
+    height:calc(3.463px * var(--unlock-scale));
+    background:#333;
+    border-radius:calc(1.732px * var(--unlock-scale));
+}
+
+.unlock-step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:calc(9.524px * var(--unlock-scale));
+    z-index:2;
+}
+
+.unlock-step .status{
+    width:calc(51.946px * var(--unlock-scale));
+    height:calc(51.946px * var(--unlock-scale));
+    border-radius:50%;
+    background:#151515;
+    border:calc(6.926px * var(--unlock-scale)) solid #000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.unlock-step .status::after{
+    content:'';
+    width:calc(13.852px * var(--unlock-scale));
+    height:calc(13.852px * var(--unlock-scale));
+    border-radius:50%;
+    background:#bdbdbd;
+}
+
+.unlock-step span{
+    font-size:calc(19.047px * var(--unlock-scale));
+    line-height:calc(22.856px * var(--unlock-scale));
+    font-weight:400;
+    color:#bcbcbc;
+    white-space:nowrap;
+}
+
+.unlock-step.completed .status{
+    background:#ff1703;
+    box-shadow:0 0 calc(25.973px * var(--unlock-scale)) rgba(255,255,255,0.4);
+}
+
+.unlock-step.completed .status::after{
+    width:calc(24px * var(--unlock-scale));
+    height:calc(24px * var(--unlock-scale));
+    background-image:var(--milestone-check-icon);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-color:transparent;
+}
+
+.unlock-step.completed span{
+    color:#fff;
+    font-weight:700;
 }
 
 /* WRONG OVERLAY */
 .wrong-overlay{
     position:absolute;
-    width:100%;
-    height:100%;
+    inset:0;
     display:none;
     justify-content:center;
     align-items:center;
+    z-index:140;
+}
+
+.wrong-overlay::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(12px);
 }
 .wrong-overlay.show{display:flex;}
 
-.wrong-bg{
+.wrong-mark{
+    --outer-size: calc(931.702px * var(--canvas-scale));
+    --inner-size: calc(var(--outer-size) * 0.8373592716);
+    --cross-size: calc(var(--outer-size) * 0.4397611988);
+    --cross-bar-thickness: calc(var(--cross-size) * 0.225);
+
     position:absolute;
-    width:90%;
-    height:50%;
-    opacity:.85;
-    z-index:5;
+    left:50%;
+    top:54.5%;
+    transform:translate(-50%, -50%);
+    width:var(--outer-size);
+    height:var(--outer-size);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:2;
 }
 
-.wrong-cross{
-    width:240px;
-    height:auto;
-    z-index:10;
+.wrong-mark-outer,
+.wrong-mark-inner{
+    position:absolute;
+    border-radius:50%;
+}
+
+.wrong-mark-outer{
+    width:var(--outer-size);
+    height:var(--outer-size);
+    background:#7e0000;
+    opacity:0.3;
+}
+
+.wrong-mark-inner{
+    width:var(--inner-size);
+    height:var(--inner-size);
+    background:#e00000;
+}
+
+.wrong-mark-cross{
+    position:relative;
+    width:var(--cross-size);
+    height:var(--cross-size);
+}
+
+.wrong-mark-cross::before,
+.wrong-mark-cross::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:138%;
+    height:var(--cross-bar-thickness);
+    border-radius:999px;
+    background:#f4f4f4;
+    transform-origin:center;
+}
+
+.wrong-mark-cross::before{
+    transform:translate(-50%, -50%) rotate(45deg);
+}
+
+.wrong-mark-cross::after{
+    transform:translate(-50%, -50%) rotate(-45deg);
+}
+
+.wrong-mark.vibrate{
+    animation:wrongCrossVibrate 0.45s ease-in-out;
+}
+
+@keyframes wrongCrossVibrate{
+    0%{transform:translate(-50%, -50%) rotate(0deg);}
+    15%{transform:translate(calc(-50% - 1.2px), -50%) rotate(0deg);}
+    30%{transform:translate(calc(-50% + 1.2px), -50%) rotate(0deg);}
+    45%{transform:translate(calc(-50% - 0.9px), -50%) rotate(0deg);}
+    60%{transform:translate(calc(-50% + 0.9px), -50%) rotate(0deg);}
+    75%{transform:translate(calc(-50% - 0.5px), -50%) rotate(0deg);}
+    100%{transform:translate(-50%, -50%) rotate(0deg);}
 }
 
 /* ================= GAME OVER SCREEN ================= */
@@ -277,12 +973,37 @@ html,body{
     width:100%;
     height:100%;
     display:none;
+    --result-scale: 0.358333;
+    --go-icon-left: 74.5px;
+    --go-icon-top: 291px;
+    --go-icon-size: 311.422px;
+    --go-text-left: 134px;
+    --go-title-size: 92.353px;
+    --go-title-line: 95.737px;
+    --go-subtitle-size: 57.609px;
+    --go-subtitle-line: 63.37px;
+    --go-subtitle-width: 741.421px;
+    --go-gap-icon-title: 53.82px;
+    --go-gap-title-subtitle: 29.64px;
+    --go-gap-subtitle-stats: 67.31px;
+    --go-stats-width: 633.997px;
+    --go-card-height: 124.351px;
+    --go-gap-cards: 26.49px;
+    --go-gap-cards-button: 122.39px;
+    --go-button-width: 537.063px;
+    --go-button-height: 94.602px;
+    --go-gap-buttons: 37.398px;
+    --go-title-top: calc(var(--go-icon-top) + var(--go-icon-size) + var(--go-gap-icon-title));
+    --go-subtitle-top: calc(var(--go-title-top) + var(--go-title-line) + var(--go-gap-title-subtitle));
+    --go-stats-top: calc(var(--go-subtitle-top) + (var(--go-subtitle-line) * 2) + var(--go-gap-subtitle-stats));
+    --go-retry-top: calc(var(--go-stats-top) + (var(--go-card-height) * 2) + var(--go-gap-cards) + var(--go-gap-cards-button));
+    --go-home-top: calc(var(--go-retry-top) + var(--go-button-height) + var(--go-gap-buttons));
+    background:#000;
 }
 .result-screen.show{
     display:block;
 }
 
-/* background EXACT */
 .result-bg{
     position:absolute;
     width:100%;
@@ -290,135 +1011,255 @@ html,body{
     object-fit:cover;
 }
 
-/* back button (DO NOT MODIFY VECTOR FILES) */
-.result-vector-bg{
+.result-back-link{
     position:absolute;
-    top:18px;
-    left:18px;
-    width:34px;
-    z-index:5;
+    left:calc(64.4px * var(--result-scale));
+    top:calc(160.65px * var(--result-scale));
+    width:calc(86.13px * var(--result-scale));
+    height:calc(86.13px * var(--result-scale));
+    z-index:20;
+    display:block;
 }
-.result-vector-icon{
+.result-back-circle{
     position:absolute;
-    top:26px;
-    left:26px;
-    width:18px;
-    z-index:6;
-    cursor:pointer;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+.result-back-arrow{
+    position:absolute;
+    width:calc(38.184px * var(--result-scale));
+    height:calc(35.247px * var(--result-scale));
+    left:calc(24px * var(--result-scale));
+    top:calc(25px * var(--result-scale));
 }
 
-/* warning triangle image */
 .result-logo{
     position:absolute;
-    top:105px;
-    left:50%;
-    transform:translateX(-50%);
-    width:140px;
+    top:calc(var(--go-icon-top) * var(--result-scale));
+    left:calc(var(--go-icon-left) * var(--result-scale));
+    width:calc(var(--go-icon-size) * var(--result-scale));
+    height:calc(var(--go-icon-size) * var(--result-scale));
+    object-fit:contain;
 }
 
-/* GAME OVER text image */
 .result-over{
     position:absolute;
-    top:195px;
-    left:50%;
-    transform:translateX(-50%);
-    width:260px;
+    top:calc(var(--go-title-top) * var(--result-scale));
+    left:calc(var(--go-text-left) * var(--result-scale));
+    font-size:calc(var(--go-title-size) * var(--result-scale));
+    font-weight:800;
+    line-height:calc(var(--go-title-line) * var(--result-scale));
+    letter-spacing:calc(-1.7407px * var(--result-scale));
+    color:#fff;
+    white-space:nowrap;
 }
 
-/* coins away text */
+.result-over span{
+    color:#ff1703;
+}
+
 .result-coins-text{
     position:absolute;
-    top:305px;
-    left:50%;
-    transform:translateX(-50%);
-    width:320px;
-    text-align:center;
-    font-size:18px;
-    font-weight:600;
+    top:calc(var(--go-subtitle-top) * var(--result-scale));
+    left:calc(var(--go-text-left) * var(--result-scale));
+    width:calc(var(--go-subtitle-width) * var(--result-scale));
+    text-align:left;
+    font-size:calc(var(--go-subtitle-size) * var(--result-scale));
+    font-weight:800;
+    letter-spacing:calc(-1.1522px * var(--result-scale));
+    line-height:calc(var(--go-subtitle-line) * var(--result-scale));
     color:#ffffff;
-    line-height:1.4;
 }
 .result-coins-text span{
-    color:#ff3b00;
+    color:#ff1703;
     font-weight:800;
 }
 
-/* stats section */
 .result-stats{
     position:absolute;
-    top:360px;
-    left:50%;
-    transform:translateX(-50%);
-    width:320px;
-    display:flex;
-    justify-content:space-between;
-    gap:16px;
-}
-
-.result-stat-box{
-    width:152px;
-    height:78px;
-    background:rgba(25,25,25,0.95);
-    border-radius:8px;
-    padding:12px 14px;
+    top:calc(var(--go-stats-top) * var(--result-scale));
+    left:calc(var(--go-text-left) * var(--result-scale));
+    width:calc(var(--go-stats-width) * var(--result-scale));
     display:flex;
     flex-direction:column;
-    justify-content:center;
+    gap:calc(var(--go-gap-cards) * var(--result-scale));
 }
 
-.stat-label{
-    font-size:12px;
-    font-weight:600;
+.result-stat-item{
+    width:100%;
+    height:calc(var(--go-card-height) * var(--result-scale));
+    background:#1f1f1f;
+    border-radius:0;
+    padding:0 calc(40px * var(--result-scale));
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.result-stat-label{
+    font-size:calc(39.084px * var(--result-scale));
+    font-weight:500;
+    line-height:calc(43.018px * var(--result-scale));
     color:#ff3b00;
-    margin-bottom:6px;
+    white-space:pre-line;
 }
 
-.stat-value{
-    font-size:22px;
-    font-weight:800;
+.result-stat-value{
+    font-size:calc(57.797px * var(--result-scale));
+    font-weight:700;
+    line-height:calc(63.615px * var(--result-scale));
     color:#ffffff;
+    white-space:nowrap;
 }
 
-/* buttons EXACT */
 .result-retry-btn{
     position:absolute;
-    top:470px;
-    left:50%;
-    transform:translateX(-50%);
-    width:320px;
-    height:48px;
+    top:calc(var(--go-retry-top) * var(--result-scale));
+    left:calc(var(--go-text-left) * var(--result-scale));
+    width:calc(var(--go-button-width) * var(--result-scale));
+    height:calc(var(--go-button-height) * var(--result-scale));
     border:none;
-    border-radius:999px;
+    border-radius:calc(52.014px * var(--result-scale));
     background:#ffffff;
-    color:#000;
+    color:#0d0d0d;
     font-weight:600;
-    font-size:15px;
+    font-size:calc(35.321px * var(--result-scale));
     cursor:pointer;
+    box-shadow:0 0 calc(4.296px * var(--result-scale)) rgba(0,0,0,0.25);
 }
 
 .result-home-btn{
     position:absolute;
-    top:535px;
-    left:50%;
-    transform:translateX(-50%);
-    width:320px;
-    height:48px;
+    top:calc(var(--go-home-top) * var(--result-scale));
+    left:calc(var(--go-text-left) * var(--result-scale));
+    width:calc(var(--go-button-width) * var(--result-scale));
+    height:calc(var(--go-button-height) * var(--result-scale));
     border:none;
-    border-radius:999px;
-    background:#ff3b00;
+    border-radius:calc(52.014px * var(--result-scale));
+    background:#ff1703;
     color:#fff;
     font-weight:600;
-    font-size:15px;
+    font-size:calc(35.321px * var(--result-scale));
     cursor:pointer;
+    box-shadow:0 0 calc(4.296px * var(--result-scale)) rgba(0,0,0,0.25);
+}
+
+.result-win-message,
+.result-win-title,
+.result-win-subtitle,
+.result-win-cta,
+.result-win-gift{
+    display:none;
+    z-index:6;
+}
+
+.result-win-message{
+    position:absolute;
+    top:calc(300px * var(--result-scale));
+    left:calc(122.7px * var(--result-scale));
+    width:calc(780.963px * var(--result-scale));
+    font-size:calc(57.609px * var(--result-scale));
+    font-weight:800;
+    line-height:calc(63.37px * var(--result-scale));
+    letter-spacing:calc(-1.1522px * var(--result-scale));
+    color:#fff;
+}
+
+.result-win-gift{
+    position:absolute;
+    top:calc(490px * var(--result-scale));
+    left:calc(101px * var(--result-scale));
+    width:calc(423.608px * var(--result-scale));
+    height:calc(423.608px * var(--result-scale));
+    object-fit:contain;
+}
+
+.result-win-title{
+    position:absolute;
+    top:calc(920px * var(--result-scale));
+    left:calc(101px * var(--result-scale));
+    width:calc(856.792px * var(--result-scale));
+    font-size:calc(74.418px * var(--result-scale));
+    font-weight:800;
+    line-height:calc(77.145px * var(--result-scale));
+    letter-spacing:calc(-1.4026px * var(--result-scale));
+    color:#fff;
+}
+
+.result-win-title span{
+    color:#ff1703;
+}
+
+.result-win-subtitle{
+    position:absolute;
+    top:calc(1038px * var(--result-scale));
+    left:calc(101px * var(--result-scale));
+    width:calc(758.294px * var(--result-scale));
+    font-size:calc(48.947px * var(--result-scale));
+    font-weight:500;
+    line-height:calc(62.023px * var(--result-scale));
+    letter-spacing:calc(-0.9789px * var(--result-scale));
+    color:#fff;
+}
+
+.result-win-cta{
+    position:absolute;
+    top:calc(1178px * var(--result-scale));
+    left:calc(101px * var(--result-scale));
+    width:calc(861.915px * var(--result-scale));
+    font-size:calc(48.947px * var(--result-scale));
+    font-weight:500;
+    line-height:calc(62.023px * var(--result-scale));
+    letter-spacing:calc(-0.9789px * var(--result-scale));
+    color:#ff1703;
+}
+
+.result-screen.win-mode .result-logo,
+.result-screen.win-mode .result-over,
+.result-screen.win-mode .result-coins-text,
+.result-screen.win-mode .result-stats{
+    display:none;
+}
+
+.result-screen.win-mode .result-win-message,
+.result-screen.win-mode .result-win-gift,
+.result-screen.win-mode .result-win-title,
+.result-screen.win-mode .result-win-subtitle,
+.result-screen.win-mode .result-win-cta,
+.result-screen.win-mode .result-retry-btn{
+    display:block;
+}
+
+.result-screen.win-mode .result-retry-btn,
+.result-screen.win-mode .result-home-btn{
+    left:calc(101px * var(--result-scale));
+    width:calc(537.063px * var(--result-scale));
+    height:calc(94.602px * var(--result-scale));
+    border-radius:calc(52.014px * var(--result-scale));
+    font-size:calc(35.321px * var(--result-scale));
+    font-weight:600;
+    box-shadow:0 0 calc(4.296px * var(--result-scale)) rgba(0,0,0,0.25);
+}
+
+.result-screen.win-mode .result-retry-btn{
+    top:calc(1318px * var(--result-scale));
+    color:#0d0d0d;
+    background:#fff;
+}
+
+.result-screen.win-mode .result-home-btn{
+    top:calc(1450px * var(--result-scale));
+    color:#fff;
+    background:#ff1703;
 }
 
 /* milestone progress */
 .result-progress{
     position:absolute;
-    bottom:32px;
-    left:50%;
-    transform:translateX(-50%);
-    width:320px;
+    top:calc(1720.83px * var(--result-scale));
+    left:calc(247.5px * var(--result-scale));
+    width:calc(585px * var(--result-scale));
 }
 
 .result-progress-container{
@@ -432,11 +1273,12 @@ html,body{
 .result-progress-container::before{
     content:'';
     position:absolute;
-    top:11px;
-    left:15px;
-    right:15px;
-    height:2px;
-    background:rgba(255,255,255,0.2);
+    top:calc(26.839px * var(--result-scale));
+    left:calc(-25.973px * var(--result-scale));
+    width:calc(636.946px * var(--result-scale));
+    height:calc(3.463px * var(--result-scale));
+    background:#333;
+    border-radius:calc(1.732px * var(--result-scale));
 }
 
 /* milestone circle */
@@ -444,32 +1286,97 @@ html,body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:6px;
+    gap:calc(9.524px * var(--result-scale));
     z-index:2;
 }
 
 .result-milestone-status{
-    width:22px;
-    height:22px;
+    width:calc(51.946px * var(--result-scale));
+    height:calc(51.946px * var(--result-scale));
     border-radius:50%;
-    background:#2b2b2b;
-    border:2px solid #444;
+    background:#151515;
+    border:calc(6.926px * var(--result-scale)) solid #000;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+}
+
+.result-milestone-status::after{
+    content:'';
+    width:calc(13.852px * var(--result-scale));
+    height:calc(13.852px * var(--result-scale));
+    border-radius:50%;
+    background:#bdbdbd;
 }
 
 .result-milestone.active .result-milestone-status{
-    background:#ff3b00;
-    border-color:#ff3b00;
+    background:#fff;
+    border-color:#000;
+    box-shadow:0 0 12px rgba(255,255,255,0.4);
+}
+
+.result-milestone.active .result-milestone-status::after{
+    background:#000;
+    width:calc(17.315px * var(--result-scale));
+    height:calc(17.315px * var(--result-scale));
+}
+
+.result-milestone.failed .result-milestone-status{
+    background:#ff1703;
+    border-color:#000;
+    box-shadow:0 0 calc(25.973px * var(--result-scale)) rgba(255,255,255,0.4);
+}
+
+.result-milestone.failed .result-milestone-status::after{
+    width:calc(24px * var(--result-scale));
+    height:calc(24px * var(--result-scale));
+    background-image:var(--result-fail-icon);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-color:transparent;
+}
+
+.result-milestone.failed span{
+    color:#fff;
+    font-weight:700;
 }
 
 .result-milestone span{
-    font-size:9px;
-    color:#888;
-    max-width:70px;
+    font-size:calc(19.047px * var(--result-scale));
+    line-height:calc(22.856px * var(--result-scale));
+    color:#bcbcbc;
     text-align:center;
+    font-weight:400;
+    white-space:nowrap;
 }
 
 .result-milestone.active span{
     color:#fff;
+    font-weight:700;
+}
+
+.result-milestone.completed .result-milestone-status{
+    background:#ff1703;
+    border-color:#000;
+    box-shadow:0 0 12px rgba(255,255,255,0.4);
+}
+
+.result-milestone.completed .result-milestone-status::after{
+    width:calc(24px * var(--result-scale));
+    height:calc(24px * var(--result-scale));
+    background-image:var(--milestone-check-icon);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-color:transparent;
+}
+
+.result-milestone.completed span{
+    color:#fff;
+    font-weight:700;
 }
 
 </style>
@@ -479,18 +1386,19 @@ html,body{
 <div class="canvas-wrapper">
 <div class="canvas">
 
-<a href="quiz_game.html">
-<img src="/assets/fifth/vector_background.png" class="vector-bg">
-<img src="/assets/fifth/vector.png" class="vector-icon">
-</a>
-
 <!-- COUNTDOWN -->
 <div class="countdown-screen" id="countdownScreen">
+<a href="quiz_game.html" class="countdown-back-link" aria-label="Back">
+<img src="/assets/fifth/vector_background.png" class="countdown-back-circle" alt="">
+<img src="/assets/fifth/vector.png" class="countdown-back-arrow" alt="">
+</a>
 <div class="countdown-text">
-<span>Starts in</span>
+<span class="countdown-label">Starts in</span>
+<div class="countdown-nums">
 <span class="countdown-num active" id="num3">3</span>
 <span class="countdown-num" id="num2">2</span>
 <span class="countdown-num" id="num1">1</span>
+</div>
 </div>
 <img src="/assets/fifth/coins.png" class="coins-img">
 <div class="level-section">
@@ -498,14 +1406,42 @@ html,body{
 <div class="level-subtitle" id="countdown-subtitle">Answer 3 Simple Question!</div>
 </div>
 <div class="progress-section">
-<img src="/assets/fifth/container.png" class="container-img">
+<div class="countdown-milestones">
+<div class="countdown-milestones-line"></div>
+<div class="countdown-milestones-row">
+<div class="countdown-milestone" id="countdown-milestone-1">
+<div class="outer"><div class="inner"></div></div>
+<span>Small Prize</span>
+</div>
+<div class="countdown-milestone" id="countdown-milestone-2">
+<div class="outer"><div class="inner"></div></div>
+<span>Driver Card</span>
+</div>
+<div class="countdown-milestone" id="countdown-milestone-3">
+<div class="outer"><div class="inner"></div></div>
+<span>Merch</span>
+</div>
+<div class="countdown-milestone" id="countdown-milestone-4">
+<div class="outer"><div class="inner"></div></div>
+<span>$100 Crypto</span>
+</div>
+</div>
+</div>
 </div>
 </div>
 
 <!-- QUIZ -->
 <div class="quiz-screen" id="quizScreen">
+<img class="quiz-bg-group" src="https://www.figma.com/api/mcp/asset/046ba97c-c3f8-4394-952c-f8e70bbf83bf" alt="">
+<img class="quiz-bg-accent" src="https://www.figma.com/api/mcp/asset/0c21ce1d-330b-4ab8-ae7c-f99d780b90cf" alt="">
+
+<a href="quiz_game.html" class="quiz-back-link" aria-label="Back">
+<img src="/assets/fifth/vector_background.png" class="quiz-back-circle" alt="">
+<img src="/assets/fifth/vector.png" class="quiz-back-arrow" alt="">
+</a>
+
 <div class="quiz-header">
-<div class="quiz-level">Level <span id="current-level">1</span></div>
+<div class="quiz-level">Level <span id="current-level">1 : EASY</span></div>
 <div class="quiz-score"><span id="coins-display">0</span> Coins</div>
 </div>
 
@@ -514,49 +1450,122 @@ html,body{
 </div>
 
 <div class="question-info">
-<div class="question-number">Question <span id="question-num">1</span>/3</div>
-<div class="timer" id="timer">00:45</div>
+<div class="question-number">Question <span id="question-num">1 of 3</span></div>
+<div class="timer" id="timer">00:20</div>
 </div>
 
 <div class="question-content">
 <div class="question-text" id="question-text"></div>
-<div class="answers" id="answers-container"></div>
 </div>
 
-<div class="coin-animation" id="coin-animation"></div>
+<div class="answers" id="answers-container"></div>
+
+<div class="coin-animation" id="coin-animation">
+<div class="coins-graphic"><img src="/assets/quiz/coins.png" alt=""></div>
+<div class="plus-coins">+10<br>Coins!</div>
+</div>
+
+<div class="quiz-milestones">
+<div class="quiz-milestones-line"></div>
+<div class="quiz-milestones-row">
+<div class="quiz-milestone active" id="quiz-milestone-1">
+<div class="outer"><div class="inner"></div></div>
+<span>Small Prize</span>
+</div>
+<div class="quiz-milestone" id="quiz-milestone-2">
+<div class="outer"><div class="inner"></div></div>
+<span>Driver Card</span>
+</div>
+<div class="quiz-milestone" id="quiz-milestone-3">
+<div class="outer"><div class="inner"></div></div>
+<span>Merch</span>
+</div>
+<div class="quiz-milestone" id="quiz-milestone-4">
+<div class="outer"><div class="inner"></div></div>
+<span>$100 Crypto</span>
+</div>
+</div>
+</div>
 
 <div class="wrong-overlay" id="wrong-overlay">
-<img src="/assets/quiz/wrong_background.png" class="wrong-bg">
-<img src="/assets/quiz/wrong_cross.png" class="wrong-cross">
+<div class="wrong-mark" id="wrong-mark">
+<div class="wrong-mark-outer"></div>
+<div class="wrong-mark-inner"></div>
+<div class="wrong-mark-cross"></div>
+</div>
+</div>
+</div>
+
+<div class="level-unlock-screen" id="level-unlock-screen">
+<img class="unlock-bg-gradient" src="https://www.figma.com/api/mcp/asset/9c997bf9-5202-462c-8e50-9bc0390f43dc" alt="">
+
+<a href="quiz_game.html" class="unlock-back-link" aria-label="Back">
+<img src="/assets/fifth/vector_background.png" class="unlock-back-circle" alt="">
+<img src="/assets/fifth/vector.png" class="unlock-back-arrow" alt="">
+</a>
+
+<div class="unlock-intro" id="unlock-intro">You won a small prize..</div>
+<img class="unlock-prize" id="unlock-prize" src="https://www.figma.com/api/mcp/asset/2881a9bd-b32c-4140-ac2a-99710e75bffa" alt="Unlocked Prize">
+<div class="unlock-title" id="unlock-title">LEVEL 2 <span>UNLOCKED!</span></div>
+<div class="unlock-subtitle" id="unlock-subtitle">Answer 3 Medium questions and get a chance to win <span class="unlock-highlight">DRIVER CARD!</span></div>
+
+<button id="unlock-continue-btn" class="unlock-continue-btn">Continue Playing</button>
+<button id="unlock-home-btn" class="unlock-home-btn">Home</button>
+
+<div class="unlock-progress">
+<div class="unlock-progress-container" id="unlock-progress-container">
+<div class="unlock-step" data-step="1">
+<div class="status"></div>
+<span>Small Prize</span>
+</div>
+<div class="unlock-step" data-step="2">
+<div class="status"></div>
+<span>Driver Card</span>
+</div>
+<div class="unlock-step" data-step="3">
+<div class="status"></div>
+<span>Merch</span>
+</div>
+<div class="unlock-step" data-step="4">
+<div class="status"></div>
+<span>$100 Crypto</span>
+</div>
+</div>
 </div>
 </div>
 
 <div class="result-screen" id="result-screen">
 <img src="/assets/game_over/background.png" class="result-bg">
 
-<a href="quiz_game.html">
-<img src="/assets/game_over/vector_background.png" class="result-vector-bg">
-<img src="/assets/game_over/vector.png" class="result-vector-icon">
+<a href="quiz_game.html" class="result-back-link" aria-label="Back">
+<img src="https://www.figma.com/api/mcp/asset/859ddc5a-4a75-4866-9a8b-ddc401c731a9" class="result-back-circle" alt="">
+<img src="https://www.figma.com/api/mcp/asset/9968c2f2-5003-45f4-952d-2846249016c6" class="result-back-arrow" alt="">
 </a>
 
-<img src="/assets/game_over/logo.png" class="result-logo">
-<img src="/assets/game_over/over.png" class="result-over">
+<img src="https://www.figma.com/api/mcp/asset/d7cbd68d-0deb-4129-8ec5-962e6d3ee7ce" class="result-logo" alt="Warning">
+<div class="result-over">GAME <span>OVER!</span></div>
+
+<div class="result-win-message">You successfully completed all the levels..!</div>
+<img src="https://www.figma.com/api/mcp/asset/5a3dbc1f-7a91-4208-971c-3098d254d848" class="result-win-gift" alt="">
+<div class="result-win-title">$100 Crypto <span>WON!</span></div>
+<div class="result-win-subtitle">Your winnings are loaded on your Krak Card!</div>
+<div class="result-win-cta">Collect your reward with Krak Card!</div>
 
 <div class="result-coins-text" id="result-coins-text">You were <span id="result-coins-amount">0</span> coins from the next level!</div>
 
 <div class="result-stats">
 <div class="result-stat-item">
-<div class="result-stat-label">Total Coins</div>
+<div class="result-stat-label">Total<br>Coins</div>
 <div class="result-stat-value" id="result-total-coins">0 Coins</div>
 </div>
 <div class="result-stat-item">
-<div class="result-stat-label">Question Answered</div>
+<div class="result-stat-label">Question<br>Answered</div>
 <div class="result-stat-value" id="result-questions-answered">0</div>
 </div>
 </div>
 
-<button id="retry-btn" class="result-retry-btn">Play Again!</button>
 <button id="home-btn" class="result-home-btn">Home</button>
+<button id="play-again-btn" class="result-retry-btn">Play Again!</button>
 
 <div class="result-progress">
 <div class="result-progress-container">
@@ -586,7 +1595,7 @@ html,body{
 <script>
 const TOTAL_LEVELS = 4;
 const QUESTIONS_PER_LEVEL = 3;
-const QUESTION_TIME = 45;
+const QUESTION_TIME = 20;
 const letters = ['A','B','C','D'];
 
 let currentLevel = 1;
@@ -601,17 +1610,36 @@ let submitted = false;
 let questionsByLevel = [];
 let answersLog = [];
 let questionsAnswered = 0;
+let wrongOverlayTimeout = null;
+let countdownTimeouts = [];
 const seenQuestionIds = new Set();
 
 const playerName = localStorage.getItem('playerName') || '';
-const retryBtn = document.getElementById('retry-btn');
-retryBtn.addEventListener('click', () => {
-    window.location.href = 'index.html';
-});
 
-const retryBtn2 = document.getElementById('home-btn');
-if(retryBtn2){
-    retryBtn2.addEventListener('click', () => {
+const homeBtn = document.getElementById('home-btn');
+if(homeBtn){
+    homeBtn.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+}
+
+const playAgainBtn = document.getElementById('play-again-btn');
+if(playAgainBtn){
+    playAgainBtn.addEventListener('click', () => {
+        window.location.href = 'quiz.html';
+    });
+}
+
+const unlockContinueBtn = document.getElementById('unlock-continue-btn');
+if(unlockContinueBtn){
+    unlockContinueBtn.addEventListener('click', () => {
+        showCountdown(currentLevel);
+    });
+}
+
+const unlockHomeBtn = document.getElementById('unlock-home-btn');
+if(unlockHomeBtn){
+    unlockHomeBtn.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
 }
@@ -666,33 +1694,56 @@ async function initQuiz(){
 function showCountdown(level){
     const countdownScreen = document.getElementById('countdownScreen');
     const quizScreen = document.getElementById('quizScreen');
+    const unlockScreen = document.getElementById('level-unlock-screen');
     const num3 = document.getElementById('num3');
     const num2 = document.getElementById('num2');
     const num1 = document.getElementById('num1');
 
     document.getElementById('countdown-level').textContent = level;
     document.getElementById('countdown-subtitle').textContent = getLevelSubtitle(level);
+    updateCountdownMilestones(level);
 
     num3.classList.add('active');
     num2.classList.remove('active');
     num1.classList.remove('active');
 
+    clearCountdownTimers();
+
     countdownScreen.style.display = 'block';
     quizScreen.style.display = 'none';
+    if(unlockScreen) unlockScreen.classList.remove('show');
 
-    setTimeout(() => {
+    countdownTimeouts.push(setTimeout(() => {
         num3.classList.remove('active');
         num2.classList.add('active');
-    }, 1000);
+    }, 1000));
 
-    setTimeout(() => {
+    countdownTimeouts.push(setTimeout(() => {
         num2.classList.remove('active');
         num1.classList.add('active');
-    }, 2000);
+    }, 2000));
 
-    setTimeout(() => {
+    countdownTimeouts.push(setTimeout(() => {
         startLevel();
-    }, 3000);
+    }, 3000));
+}
+
+function clearCountdownTimers(){
+    countdownTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    countdownTimeouts = [];
+}
+
+function updateCountdownMilestones(level){
+    for(let i = 1; i <= TOTAL_LEVELS; i++){
+        const milestone = document.getElementById(`countdown-milestone-${i}`);
+        if(!milestone) continue;
+        milestone.classList.remove('active', 'completed');
+        if(i < level){
+            milestone.classList.add('completed');
+        }else if(i === level){
+            milestone.classList.add('active');
+        }
+    }
 }
 
 function getLevelSubtitle(level){
@@ -702,13 +1753,89 @@ function getLevelSubtitle(level){
     return 'Answer 3 Expert Question!';
 }
 
+function getLevelLabel(level){
+    if(level === 1) return 'EASY';
+    if(level === 2) return 'MEDIUM';
+    if(level === 3) return 'HARD';
+    return 'EXPERT';
+}
+
 function startLevel(){
+    clearCountdownTimers();
     levelCorrect = 0;
     currentQuestion = 0;
     document.getElementById('countdownScreen').style.display = 'none';
+    const unlockScreen = document.getElementById('level-unlock-screen');
+    if(unlockScreen) unlockScreen.classList.remove('show');
     document.getElementById('quizScreen').style.display = 'block';
-    document.getElementById('current-level').textContent = currentLevel;
+    document.getElementById('current-level').textContent = `${currentLevel} : ${getLevelLabel(currentLevel)}`;
+    updateQuizMilestones();
     loadQuestion();
+}
+
+function getUnlockContent(level){
+    if(level === 2){
+        return {
+            intro: 'You won a small prize..',
+            title: 'LEVEL 2 <span>UNLOCKED!</span>',
+            subtitle: 'Answer 3 Medium questions and get a chance to win <span class="unlock-highlight">DRIVER CARD!</span>'
+        };
+    }
+    if(level === 3){
+        return {
+            intro: 'You won a driver card..',
+            title: 'LEVEL 3 <span>UNLOCKED!</span>',
+            subtitle: 'Answer 3 Hard questions and get a chance to win <span class="unlock-highlight">MERCH!</span>'
+        };
+    }
+    return {
+        intro: 'You won merch..',
+        title: 'LEVEL 4 <span>UNLOCKED!</span>',
+        subtitle: 'Answer 3 Expert questions and get a chance to win <span class="unlock-highlight">$100 CRYPTO!</span>'
+    };
+}
+
+function updateUnlockMilestones(level){
+    const steps = document.querySelectorAll('.unlock-step');
+    steps.forEach(step => {
+        step.classList.remove('active', 'completed');
+        const stepNum = Number(step.getAttribute('data-step'));
+        if(stepNum < level){
+            step.classList.add('completed');
+        }
+    });
+}
+
+function showLevelUnlock(level){
+    const unlockScreen = document.getElementById('level-unlock-screen');
+    const quizScreen = document.getElementById('quizScreen');
+    const countdownScreen = document.getElementById('countdownScreen');
+    const content = getUnlockContent(level);
+
+    if(!unlockScreen) return startLevel();
+
+    if(quizScreen) quizScreen.style.display = 'none';
+    if(countdownScreen) countdownScreen.style.display = 'none';
+
+    document.getElementById('unlock-intro').textContent = content.intro;
+    document.getElementById('unlock-title').innerHTML = content.title;
+    document.getElementById('unlock-subtitle').innerHTML = content.subtitle;
+
+    updateUnlockMilestones(level);
+    unlockScreen.classList.add('show');
+}
+
+function updateQuizMilestones(){
+    for(let i = 1; i <= TOTAL_LEVELS; i++){
+        const milestone = document.getElementById(`quiz-milestone-${i}`);
+        if(!milestone) continue;
+        milestone.classList.remove('active', 'completed');
+        if(i < currentLevel){
+            milestone.classList.add('completed');
+        }else if(i === currentLevel){
+            milestone.classList.add('active');
+        }
+    }
 }
 
 function loadQuestion(){
@@ -718,7 +1845,7 @@ function loadQuestion(){
 
     const q = questionsByLevel[currentLevel - 1][currentQuestion];
     document.getElementById('question-text').innerText = q.question;
-    document.getElementById('question-num').innerText = currentQuestion + 1;
+    document.getElementById('question-num').innerText = `${currentQuestion + 1} of ${QUESTIONS_PER_LEVEL}`;
     document.getElementById('coins-display').innerText = score;
 
     document.getElementById('progress-fill').style.width = ((currentQuestion + 1) / QUESTIONS_PER_LEVEL * 100) + '%';
@@ -729,7 +1856,7 @@ function loadQuestion(){
     q.answers.forEach((ans, i) => {
         const div = document.createElement('div');
         div.className = 'answer-option';
-        div.innerHTML = `<div class="answer-letter">${letters[i]}</div><div class="answer-text">${ans}</div>`;
+        div.innerHTML = `<div class="answer-letter"><span>${letters[i]}</span></div><div class="answer-text">${ans}</div>`;
         div.onclick = () => selectAnswer(div, i, q.correct, q);
         container.appendChild(div);
     });
@@ -798,8 +1925,7 @@ function selectAnswer(option, selected, correct, question){
         }else{
             option.classList.add('wrong');
             logAnswer(question, selected, correct, false);
-            showWrongOverlay();
-            setTimeout(showGameOver, 2000);
+            showWrongOverlay(2000, showGameOver);
         }
     }, 2000);
 }
@@ -807,7 +1933,7 @@ function selectAnswer(option, selected, correct, question){
 function handleWrongAnswer(userAnswer, question){
     const q = question || questionsByLevel[currentLevel - 1][currentQuestion];
     logAnswer(q, userAnswer, q.correct, false);
-    showGameOver();
+    showWrongOverlay(2000, showGameOver);
 }
 
 function logAnswer(question, userAnswer, correctAnswer, isCorrect){
@@ -823,15 +1949,29 @@ function logAnswer(question, userAnswer, correctAnswer, isCorrect){
 
 function showCoinAnimation(){
     const el = document.getElementById('coin-animation');
-    el.innerHTML = `<img src="/assets/quiz/coins.png" width="100%">
-<img src="/assets/quiz/10coins.png" style="position:absolute;top:40px;right:0;width:90px;">`;
     el.classList.add('show');
-    setTimeout(() => { el.classList.remove('show'); el.innerHTML = ''; }, 1000);
+    setTimeout(() => { el.classList.remove('show'); }, 1000);
 }
 
-function showWrongOverlay(){
-    document.getElementById('wrong-overlay').classList.add('show');
-    setTimeout(() => { document.getElementById('wrong-overlay').classList.remove('show'); }, 2000);
+function showWrongOverlay(duration = 2000, onDone){
+    const overlay = document.getElementById('wrong-overlay');
+    const mark = document.getElementById('wrong-mark');
+    if(!overlay || !mark){
+        if(typeof onDone === 'function') onDone();
+        return;
+    }
+
+    clearTimeout(wrongOverlayTimeout);
+    overlay.classList.add('show');
+    mark.classList.remove('vibrate');
+    void mark.offsetWidth;
+    mark.classList.add('vibrate');
+
+    wrongOverlayTimeout = setTimeout(() => {
+        overlay.classList.remove('show');
+        mark.classList.remove('vibrate');
+        if(typeof onDone === 'function') onDone();
+    }, duration);
 }
 
 function nextQuestion(){
@@ -840,7 +1980,7 @@ function nextQuestion(){
         if(levelCorrect === QUESTIONS_PER_LEVEL){
             if(currentLevel < TOTAL_LEVELS){
                 currentLevel++;
-                showCountdown(currentLevel);
+                showLevelUnlock(currentLevel);
             }else{
                 showUnlocked();
             }
@@ -865,23 +2005,42 @@ function endGame(isWin){
     document.getElementById('quizScreen').style.display = 'none';
     const r = document.getElementById('result-screen');
     r.classList.add('show');
+    r.classList.toggle('win-mode', isWin);
     
     // Calculate coins away from next level
     const nextLevelCoins = (currentLevel) * 30;
-    const coinsAway = nextLevelCoins - score;
+    const coinsAway = Math.max(0, nextLevelCoins - score);
     document.getElementById('result-coins-amount').textContent = coinsAway;
     
     // Set total coins
     document.getElementById('result-total-coins').textContent = score + ' Coins';
     
-    // Set questions answered
-    document.getElementById('result-questions-answered').textContent = questionsAnswered;
+    // Show correct answers instead of seen questions
+    document.getElementById('result-questions-answered').textContent = totalCorrect;
     
     // Highlight milestones based on level reached
     for(let i = 1; i <= 4; i++){
         const milestone = document.getElementById('milestone-' + i);
-        if(milestone && i <= currentLevel){
+        if(!milestone) continue;
+        milestone.classList.remove('active', 'completed', 'failed');
+        if(isWin || i < currentLevel){
+            milestone.classList.add('completed');
+        }else if(isWin && i === currentLevel){
             milestone.classList.add('active');
+        }else if(!isWin && i === currentLevel){
+            milestone.classList.add('failed');
+        }
+    }
+
+    if(isWin){
+        const resultText = document.getElementById('result-coins-text');
+        if(resultText){
+            resultText.innerHTML = 'You completed all levels with <span>maximum rewards</span>!';
+        }
+    }else{
+        const resultText = document.getElementById('result-coins-text');
+        if(resultText){
+            resultText.innerHTML = `You were <span>${coinsAway}</span> coins from the next level!`;
         }
     }
     

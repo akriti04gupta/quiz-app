@@ -37,19 +37,30 @@ html,body{
     background-size:cover;
 }
 
-/* VECTOR TOP LEFT — EXACT SAME AS quiz.html */
-.vector-bg{
+/* BACK BUTTON */
+.page-back-link{
     position:absolute;
-    top:18px;
-    left:18px;
-    width:36px;
+    left:23.1px;
+    top:57.6px;
+    width:30.9px;
+    height:30.9px;
+    z-index:20;
+    display:block;
 }
 
-.vector-icon{
+.page-back-circle{
     position:absolute;
-    top:26px;
-    left:27px;
-    width:20px;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.page-back-arrow{
+    position:absolute;
+    width:13.7px;
+    height:12.6px;
+    left:8.6px;
+    top:9px;
 }
 
 /* TITLE IMAGE */
@@ -76,10 +87,7 @@ html,body{
 }
 
 .card-c{
-    position:absolute;
-    top:390px;
-    left:30px;
-    width:327px;
+    display:none;
 }
 .card-b-icon{
     position:absolute;
@@ -92,10 +100,10 @@ html,body{
 /* NEXT BUTTON */
 .next-btn{
     position:absolute;
-    bottom:80px;
-    left:50%;
+    bottom:75px;
+    left:43%;
     transform:translateX(-50%);
-    width:240px;
+    width:220px;
     cursor:pointer;
 }
 
@@ -107,11 +115,11 @@ html,body{
 <div class="canvas-wrapper" id="wrapper">
     <div class="canvas"></div>
 
-    <!-- VECTOR BACK BUTTON (same position as quiz.html) -->
-    <div onclick="location.href='quiz.html'">
-        <img src="/assets/third/vector_background.png" class="vector-bg">
-        <img src="/assets/third/vector.png" class="vector-icon">
-    </div>
+    <!-- BACK BUTTON -->
+    <a href="quiz.html" class="page-back-link" aria-label="Back">
+        <img src="/assets/third/vector_background.png" class="page-back-circle" alt="">
+        <img src="/assets/third/vector.png" class="page-back-arrow" alt="">
+    </a>
 
     <!-- TITLE -->
     <img src="/assets/third/code.png" class="code-title">
@@ -120,8 +128,6 @@ html,body{
     <img src="/assets/third/a.png" class="card-a">
     <img src="/assets/third/b.png" class="card-b">
     <img src="/assets/third/orange.png" class="card-b-icon">
-
-    <img src="/assets/third/c.png" class="card-c">
 
     <!-- NEXT BUTTON -->
     <img src="/assets/third/next.png" class="next-btn" onclick="location.href='quiz_game.html'">
